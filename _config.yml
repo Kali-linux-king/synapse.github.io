@@ -74,3 +74,8 @@ defaults:
       path: "articles"
     values:
       toc: true  # Remove this temporarily
+      
+# _config.yml
+ai_services:
+  knowledge_graph: "https://api.synapse.ai/graph/v3"
+  content_optimizer: "https://api.synapse.ai/optimize/v2"
