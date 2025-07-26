@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+{% include head.html %}
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  
+  {% include header.html %}
+
+  <main id="main-content" class="main" role="main">
+    {{ content }}
+  </main>
+
+  {% include footer.html %}
+  {% include scripts.html %}
+</body>
+</html>

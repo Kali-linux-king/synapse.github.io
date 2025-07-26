@@ -1,0 +1,23 @@
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+.floating {
+  animation: float 6s ease-in-out infinite;
+  
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+  
+  &:nth-child(odd) {
+    animation-delay: 0.5s;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .floating {
+    animation: none;
+  }
+}

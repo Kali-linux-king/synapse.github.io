@@ -1,0 +1,32 @@
+// Core variables
+$primary: #7c3aed;
+$secondary: #10b981;
+$dark: #0f172a;
+$light: #f8fafc;
+
+// Base styles
+@import "normalize";
+@import "base/typography";
+@import "base/utilities";
+@import "base/animations";
+
+// Layout
+@import "layout/grid";
+@import "layout/header";
+@import "layout/footer";
+@import "layout/sidebar";
+
+// Components
+@import "components/buttons";
+@import "components/cards";
+@import "components/forms";
+@import "components/navigation";
+
+// Effects
+@import "effects/particles";
+@import "effects/tilt";
+@import "effects/floating";
+
+// Pages
+@import "pages/home";
+@import "pages/post";

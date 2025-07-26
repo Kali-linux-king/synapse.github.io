@@ -1,0 +1,21 @@
+{% if site.synapse.effects.tilt_cards %}
+<script>
+if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  // Load only when needed
+  if (document.querySelectorAll('[data-tilt]').length > 0) {
+    var script = document.createElement('script');
+    script.src = "https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.2/vanilla-tilt.min.js";
+    script.onload = function() {
+      VanillaTilt.init(document.querySelectorAll("[data-tilt]"), {
+        max: {{ site.synapse.effects.tilt_intensity | default: 15 }},
+        speed: 400,
+        glare: true,
+        "max-glare": 0.2,
+        gyroscope: false // Better performance
+      });
+    };
+    document.body.appendChild(script);
+  }
+}
+</script>
+{% endif %}

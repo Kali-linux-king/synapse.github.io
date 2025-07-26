@@ -1,0 +1,76 @@
+# Core Settings
+title: "SYNAPSE"
+tagline: "Interconnecting Knowledge for Deeper Understanding"
+baseurl: ""
+url: "https://kali-linux-king.github.io"
+timezone: "Asia/Karachi"
+encoding: "UTF-8"
+future: true
+published: true
+locale: "en_US"
+
+# Plugins (no theme needed)
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag
+  - jekyll-sass-converter
+
+# Motion Effects Configuration
+synapse:
+  effects:
+    particles: true
+    tilt_cards: true
+    floating_animations: true
+  
+  particles:
+    density: 80
+    color: "#7c3aed"
+    line_color: "#10b981"
+
+# Content Structure
+collections:
+  articles:
+    output: true
+    permalink: "/articles/:title/"
+  
+  tutorials:
+    output: true
+    permalink: "/tutorials/:slug/"
+  
+  projects:
+    output: true
+    permalink: "/projects/:year/:slug/"
+
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: "default"
+  
+  - scope:
+      path: "articles"
+      type: "articles"
+    values:
+      layout: "article"
+      toc: true
+
+# Build Settings
+markdown: kramdown
+highlighter: rouge
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules/
+  - vendor/
+
+# Remove these lines if they exist
+defaults:
+  - scope:
+      path: "articles"
+    values:
+      toc: true  # Remove this temporarily

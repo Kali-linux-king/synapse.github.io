@@ -1,0 +1,24 @@
+[data-tilt] {
+  transition: transform 0.4s cubic-bezier(0.03, 0.98, 0.52, 0.99),
+              box-shadow 0.4s ease;
+  transform-style: preserve-3d;
+  will-change: transform;
+
+  &:hover {
+    transform: perspective(1000px) rotateX(2deg) rotateY(2deg) scale(1.02);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transform: none !important;
+  }
+
+  // Mobile devices
+  @media (max-width: 768px) {
+    transform: none !important;
+  }
+}
+
+.tilt-glare {
+  border-radius: inherit;
+  overflow: hidden;
+}
