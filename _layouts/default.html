@@ -1,16 +1,170 @@
 <!DOCTYPE html>
-<html lang="en" class="no-js">
-{% include head.html %}
+<html lang="en" class="{% if site.theme_settings.dark_mode %}dark-mode{% endif %}">
+<head>
+  {% include head.html %}
+</head>
 <body>
-  <a class="skip-link" href="#main-content">Skip to content</a>
-  
+  <!-- Neural Network Background -->
+  {% include _components/neural-connection.html 
+     nodes=80 
+     connections=0.3
+     colorScheme="synapse" 
+  %}
+
+  <!-- Particle Background -->
+  {% include particles.html 
+     preset="neural" 
+     density=0.6
+     position="fixed" 
+  %}
+
+  <!-- Header Section -->
   {% include header.html %}
 
-  <main id="main-content" class="main" role="main">
-    {{ content }}
+  <!-- Main Content -->
+  <main class="page-content">
+    <div class="wrapper">
+      {{ content }}
+    </div>
   </main>
 
+  <!-- Footer Section -->
   {% include footer.html %}
+
+  <!-- Cookie Consent -->
   {% include scripts.html %}
+
+  <!-- Tilt.js Initialization -->
+  {% include tilt-effect.html target=".card, .feature-card" %}
+
+  <!-- Back to Top Button -->
+  <button class="back-to-top" aria-label="Back to top">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
+  <script>
+  // Back to Top Button
+  document.addEventListener('DOMContentLoaded', function() {
+    const backToTop = document.querySelector('.back-to-top');
+    
+    window.addEventListener('scroll', function() {
+      if (window.pageYOffset > 300) {
+        backToTop.classList.add('visible');
+      } else {
+        backToTop.classList.remove('visible');
+      }
+    });
+    
+    backToTop.addEventListener('click', function() {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+
+    // Dark mode toggle
+    const darkModeToggle = document.getElementById('dark-mode-toggle');
+    if(darkModeToggle) {
+      darkModeToggle.addEventListener('click', function() {
+        document.documentElement.classList.toggle('dark-mode');
+        localStorage.setItem('darkMode', document.documentElement.classList.contains('dark-mode'));
+      });
+    }
+  });
+  </script>
+
+  <style>
+  /* ========================
+     BASE LAYOUT STYLES
+     ======================== */
+  :root {
+    --primary: #4f46e5;
+    --primary-light: #a78bfa;
+    --text: #111827;
+    --text-light: #6b7280;
+    --bg: #ffffff;
+    --bg-secondary: #f9fafb;
+    --border: #e5e7eb;
+  }
+
+  .dark-mode {
+    --primary: #a78bfa;
+    --primary-light: #7c3aed;
+    --text: #f3f4f6;
+    --text-light: #9ca3af;
+    --bg: #111827;
+    --bg-secondary: #1f2937;
+    --border: #374151;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.6;
+    color: var(--text);
+    background-color: var(--bg);
+    transition: background-color 0.3s ease, color 0.3s ease;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+  }
+
+  .page-content {
+    padding: 2rem 0;
+    min-height: 70vh;
+  }
+
+  .wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  /* Back to Top Button */
+  .back-to-top {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 50px;
+    height: 50px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    z-index: 100;
+  }
+
+  .back-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  /* Dark Mode Transition */
+  * {
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+  }
+
+  /* Responsive Adjustments */
+  @media (max-width: 768px) {
+    .wrapper {
+      padding: 0 1rem;
+    }
+    
+    .page-content {
+      padding: 1rem 0;
+    }
+  }
+  </style>
 </body>
 </html>

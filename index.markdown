@@ -1,240 +1,96 @@
 ---
-# Front Matter with SEO and Motion Configuration
 layout: home
-title: "SYNAPSE | AI, Cybersecurity & Emerging Tech Knowledge Hub"
-description: "Connect interdisciplinary knowledge across AI, Cybersecurity and Emerging Technologies. Expert articles, tutorials and research synthesis."
-permalink: /
-sitemap:
-  priority: 1.0
-  changefreq: weekly
-particles: true
-floating_effects: true
-tilt_cards: true
-animated_header: true
-gradient_text: true
-neon_effects: true
-canonical_url: "https://yoursite.com/"
-og:
-  image: "/assets/images/synapse-social.jpg"
-  image_alt: "SYNAPSE Knowledge Interconnection Diagram"
-twitter:
-  card: "summary_large_image"
-schema: "WebSite"
+title: "Synapse: Curated Knowledge Hub"
+description: "Discover interconnected ideas with expert-curated resources"
+monetization:
+  enabled: true
+  featured_affiliates:
+    - title: "Recommended AI Books"
+      link: "/ai-books"
+      cta: "See Recommendations"
+    - title: "Developer Tools"
+      link: "/dev-tools"
+      cta: "Explore Deals"
 ---
 
-<!-- Schema.org Markup -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  "name": "SYNAPSE",
-  "url": "https://yoursite.com/",
-  "potentialAction": {
-    "@type": "SearchAction",
-    "target": "https://yoursite.com/search?q={search_term_string}",
-    "query-input": "required name=search_term_string"
-  }
-}
-</script>
+# Welcome to {{ site.title }} 
 
-<!-- Hero Section with Structured Data -->
-<section class="hero" id="particles-js" itemscope itemtype="https://schema.org/WPHeader">
-  <div class="container">
-    <div class="hero-content">
-      <h1 class="gradient-text" itemprop="headline">Interconnecting Knowledge for Deeper Understanding</h1>
-      <p itemprop="description">Your dynamic neural network for <span itemprop="keywords">Artificial Intelligence, Cybersecurity, and Emerging Technologies</span>. We synthesize information to reveal the intricate relationships between cutting-edge concepts.</p>
-      <div class="cta-buttons">
-        <a href="/articles/" class="btn btn-gradient pulse" itemprop="potentialAction" itemscope itemtype="https://schema.org/SearchAction">
-          <span itemprop="query-input">Explore Content</span>
-        </a>
-        <a href="/community/" class="btn btn-outline" itemprop="potentialAction" itemscope itemtype="https://schema.org/JoinAction">
-          Join Our Community
-        </a>
-      </div>
-    </div>
-  </div>
-</section>
+<div class="hero">
+  <p class="tagline">{{ site.description }}</p>
+  {% include particles-js.html %}
+</div>
 
-<!-- Knowledge Hub Tabs -->
-<div class="tabs-container" itemscope itemtype="https://schema.org/ItemList">
-  <div class="tabs" data-active-tab="1">
-    <div class="tab active" onclick="openTab(event, 'tab1')" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-      <i class="fas fa-robot"></i> <span itemprop="name">AI Insights</span>
-    </div>
-    <div class="tab" onclick="openTab(event, 'tab2')" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-      <i class="fas fa-shield-alt"></i> <span itemprop="name">Cyber Security</span>
-    </div>
-    <div class="tab" onclick="openTab(event, 'tab3')" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-      <i class="fas fa-atom"></i> <span itemprop="name">Emerging Tech</span>
+## Featured Pathways
+
+<div class="pathway-grid">
+  <!-- Cognitive Science -->
+  <div class="pathway-card">
+    <h3>🧠 Cognitive Science</h3>
+    <p>Explore how the mind processes information</p>
+    <a href="/cognitive-science" class="btn">Start Learning</a>
+    <div class="affiliate-badge" data-tooltip="Contains affiliate links">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+        <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+      </svg>
     </div>
   </div>
 
-  <!-- AI Content -->
-  <div id="tab1" class="tab-content active" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-    <h2 class="section-title gradient-text" itemprop="name">Artificial Intelligence</h2>
-    <p itemprop="description">Explore the rapidly evolving landscape of <span itemprop="keywords">Artificial Intelligence and Machine Learning</span>. From fundamental concepts to breakthrough applications transforming industries.</p>
-    
-    <div class="focus-areas">
-      {% include card.html 
-         image="/assets/images/ml.jpg"
-         title="Machine Learning"
-         description="Algorithms that enable systems to learn from data patterns"
-         links="articles|tutorials|projects"
-         animation_delay="0.1s"
-         schema="TechArticle"
-      %}
-      
-      {% include card.html 
-         image="/assets/images/nlp.jpg"
-         title="NLP & LLMs"
-         description="How computers understand and generate human language"
-         links="articles|tutorials|projects"
-         animation_delay="0.3s"
-         schema="TechArticle"
-      %}
-    </div>
-    
-    <div class="text-center mt-5">
-      <a href="/ai/" class="btn btn-accent" aria-label="Explore all AI content">
-        View All AI Resources <i class="fas fa-arrow-right"></i>
-      </a>
-    </div>
-  </div>
-
-  <!-- Cybersecurity Content -->
-  <div id="tab2" class="tab-content" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-    <h2 class="section-title gradient-text" itemprop="name">Cyber Security</h2>
-    <p itemprop="description">Comprehensive <span itemprop="keywords">Cybersecurity resources</span> to protect digital assets in an increasingly connected threat landscape.</p>
-    
-    <div class="focus-areas">
-      {% include card.html 
-         image="/assets/images/cyber.jpg"
-         title="Threat Intelligence"
-         description="Identifying and mitigating digital security threats"
-         links="articles|tutorials|projects"
-         schema="TechArticle"
-      %}
-    </div>
-  </div>
-
-  <!-- Emerging Tech Content -->
-  <div id="tab3" class="tab-content" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-    <h2 class="section-title gradient-text" itemprop="name">Emerging Technologies</h2>
-    <p itemprop="description">The next wave of <span itemprop="keywords">technological innovation</span> that will define our future society and economy.</p>
-    
-    <div class="focus-areas">
-      {% include card.html 
-         image="/assets/images/quantum.jpg"
-         title="Quantum Computing"
-         description="Next-generation computational paradigms"
-         links="articles|tutorials|projects"
-         schema="TechArticle"
-      %}
-    </div>
+  <!-- AI & ML -->
+  <div class="pathway-card">
+    <h3>🤖 Artificial Intelligence</h3>
+    <p>Latest breakthroughs and learning resources</p>
+    <a href="/artificial-intelligence" class="btn">Explore AI</a>
   </div>
 </div>
 
-<!-- Value Proposition Section -->
-<section class="why-choose" itemscope itemtype="https://schema.org/WebPageElement">
-  <div class="container">
-    <h2 class="section-title gradient-text" itemprop="name">Why Choose SYNAPSE?</h2>
-    
-    <div class="focus-areas">
-      {% include feature-card.html 
-         icon="link"
-         title="Interconnected Knowledge"
-         description="See cross-disciplinary connections between technologies"
-         tilt="true"
-         schema="WebPageElement"
-      %}
-      
-      {% include feature-card.html 
-         icon="graduation-cap"
-         title="Expert-Curated Content"
-         description="Content vetted by industry professionals"
-         tilt="true"
-         schema="WebPageElement"
-      %}
-      
-      {% include feature-card.html 
-         icon="network-wired"
-         title="Dynamic Learning Paths"
-         description="Adaptive recommendations based on your goals"
-         tilt="true"
-         schema="WebPageElement"
-      %}
-    </div>
-  </div>
-</section>
+## Monetization Disclaimer
 
-<!-- CTA Section with Conversion Optimization -->
-<section class="cta" itemscope itemtype="https://schema.org/WPFooter">
-  <div class="container">
-    <h2 class="gradient-text" itemprop="headline">Ready to Expand Your Knowledge?</h2>
-    <p itemprop="description">Join <span id="memberCount">4,500+</span> professionals in our learning community</p>
-    
-    <div class="cta-buttons">
-      <a href="/signup/" class="btn btn-gradient" itemprop="potentialAction" itemscope itemtype="https://schema.org/RegisterAction">
-        <i class="fas fa-user-plus"></i> <span itemprop="name">Create Free Account</span>
-      </a>
-      <a href="/articles/" class="btn btn-accent" itemprop="potentialAction" itemscope itemtype="https://schema.org/SearchAction">
-        <i class="fas fa-book-reader"></i> <span itemprop="query-input">Browse Articles</span>
-      </a>
-    </div>
-    
-    <div class="trust-badges mt-4">
-      <img src="/assets/images/trust-badge-1.png" alt="Trusted by leading tech companies" width="120" height="40" loading="lazy">
-      <img src="/assets/images/trust-badge-2.png" alt="Featured in Tech Publications" width="120" height="40" loading="lazy">
-    </div>
-  </div>
-</section>
+{% include affiliate-disclaimer.html %}
 
-<!-- Floating Background Elements -->
-<div class="orb orb-1"></div>
-<div class="orb orb-2"></div>
-
-<!-- Motion Effects Configuration -->
-{% if page.particles %}
-  {% include particles.html %}
-{% endif %}
-
-{% if page.tilt_cards %}
-  {% include tilt-effect.html %}
-{% endif %}
-
-<script>
-// Dynamic Member Count
-fetch('/api/member-count')
-  .then(response => response.json())
-  .then(data => {
-    document.getElementById('memberCount').textContent = data.count.toLocaleString() + '+';
-  });
-
-// Tab Persistence
-if (typeof localStorage !== 'undefined') {
-  // Save tab state
-  document.querySelectorAll('.tab').forEach(tab => {
-    tab.addEventListener('click', function() {
-      localStorage.setItem('activeTab', this.dataset.tab);
-    });
-  });
-  
-  // Load tab state
-  const activeTab = localStorage.getItem('activeTab') || '1';
-  openTab(null, 'tab' + activeTab);
+<style>
+/* Professional Homepage Styling */
+.hero {
+  position: relative;
+  padding: 4rem 2rem;
+  text-align: center;
+  margin-bottom: 3rem;
 }
 
-// SEO-friendly Tab Switching
-function openTab(evt, tabName) {
-  // Implementation remains same but now updates history
-  history.replaceState(null, null, `#${tabName}`);
+.pathway-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin: 3rem 0;
 }
-</script>
 
-<noscript>
-  <style>
-    /* Fallback styles when JS is disabled */
-    .tab-content { display: block !important; }
-    .tabs { display: none; }
-  </style>
-</noscript>
+.pathway-card {
+  border: 1px solid #eaeaea;
+  border-radius: 8px;
+  padding: 2rem;
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.pathway-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.affiliate-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  color: #FFD700;
+  cursor: help;
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background: #4f46e5;
+  color: white;
+  border-radius: 4px;
+  text-decoration: none;
+  margin-top: 1rem;
+}
+</style>

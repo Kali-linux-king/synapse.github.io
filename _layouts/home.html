@@ -2,34 +2,307 @@
 layout: default
 ---
 
-<div class="home">
-  {% if site.synapse.effects.particles %}
-    {% include particles-js.html %}
-  {% endif %}
+{% include particles.html 
+   id="hero-particles" 
+   preset="neural" 
+   density=0.8 
+   color="#4f46e5"
+%}
 
-  <section class="hero">
-    <div class="hero-content">
-      <h1 class="hero-title">{{ site.title }}</h1>
-      <p class="hero-description">{{ site.description }}</p>
-      <div class="hero-cta">
-        <a href="/articles" class="button">Explore Articles</a>
-        <a href="/about" class="button button-outline">Learn More</a>
+<section class="hero-section">
+  <div class="hero-content">
+    <h1 class="hero-title">{{ site.title }}</h1>
+    <p class="hero-subtitle">{{ site.description }}</p>
+    
+    <div class="hero-cta">
+      {% include page-cta.html 
+         title="Start Exploring" 
+         cta_text="Browse Topics" 
+         cta_url="/topics"
+         secondary_text="Learn More" 
+         secondary_url="/about"
+         type="featured" 
+      %}
+    </div>
+  </div>
+  
+  <div class="hero-scroll-indicator">
+    <span>Scroll to explore</span>
+    <i class="fas fa-chevron-down"></i>
+  </div>
+</section>
+
+<section class="knowledge-grid-section">
+  <div class="wrapper">
+    <h2 class="section-title">Featured Pathways</h2>
+    
+    <div class="pathway-grid">
+      {% for topic in site.data.featured_topics limit:4 %}
+        {% include card.html 
+           title=topic.name 
+           description=topic.description 
+           url=topic.url
+           image=topic.image
+           premium=topic.premium 
+        %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="value-props">
+  <div class="wrapper">
+    <div class="props-grid">
+      <div class="prop-card">
+        <i class="fas fa-brain"></i>
+        <h3>Curated Knowledge</h3>
+        <p>Expert-selected resources across multiple disciplines</p>
+      </div>
+      
+      <div class="prop-card">
+        <i class="fas fa-project-diagram"></i>
+        <h3>Connected Learning</h3>
+        <p>See how concepts interrelate across fields</p>
+      </div>
+      
+      <div class="prop-card">
+        <i class="fas fa-bolt"></i>
+        <h3>Rapid Understanding</h3>
+        <p>Accelerate your learning with visual frameworks</p>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section class="featured-posts">
+<section class="recent-content">
+  <div class="wrapper">
     <h2 class="section-title">Latest Insights</h2>
     <div class="post-grid">
       {% for post in site.posts limit:3 %}
-        <article class="post-card" data-tilt>
-          <div class="post-card-content">
-            <h3><a href="{{ post.url }}">{{ post.title }}</a></h3>
-            <p>{{ post.excerpt | strip_html | truncatewords: 20 }}</p>
-            <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%B %-d, %Y" }}</time>
-          </div>
-        </article>
+        {% include feature-card.html 
+           title=post.title 
+           description=post.excerpt 
+           url=post.url
+           icon="fas fa-lightbulb"
+           color="blue" 
+        %}
       {% endfor %}
     </div>
-  </section>
-</div>
+  </div>
+</section>
+
+<style>
+/* ========================
+   HOME LAYOUT STYLES
+   ======================== */
+.hero-section {
+  position: relative;
+  min-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0 1.5rem;
+  color: white;
+  overflow: hidden;
+}
+
+.hero-content {
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+  padding: 2rem;
+  background: rgba(17, 24, 39, 0.7);
+  border-radius: 16px;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.hero-title {
+  font-size: 3.5rem;
+  margin: 0 0 1rem 0;
+  line-height: 1.2;
+  background: linear-gradient(to right, white, #a78bfa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-subtitle {
+  font-size: 1.4rem;
+  max-width: 700px;
+  margin: 0 auto 2rem;
+  opacity: 0.9;
+}
+
+.hero-cta {
+  margin-top: 2rem;
+}
+
+.hero-scroll-indicator {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+  opacity: 0.7;
+  animation: bounce 2s infinite;
+  z-index: 2;
+}
+
+.hero-scroll-indicator i {
+  margin-top: 0.5rem;
+}
+
+/* Knowledge Grid */
+.knowledge-grid-section {
+  padding: 5rem 0;
+  background: var(--bg-secondary);
+}
+
+.section-title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 3rem;
+  position: relative;
+}
+
+.section-title::after {
+  content: '';
+  display: block;
+  width: 80px;
+  height: 4px;
+  background: var(--primary);
+  margin: 1rem auto 0;
+  border-radius: 2px;
+}
+
+.pathway-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+/* Value Propositions */
+.value-props {
+  padding: 5rem 0;
+  background: var(--bg);
+}
+
+.props-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.prop-card {
+  text-align: center;
+  padding: 2rem;
+  border-radius: 12px;
+  background: var(--bg-secondary);
+  transition: transform 0.3s ease;
+}
+
+.prop-card:hover {
+  transform: translateY(-5px);
+}
+
+.prop-card i {
+  font-size: 2.5rem;
+  color: var(--primary);
+  margin-bottom: 1rem;
+}
+
+.prop-card h3 {
+  margin: 0 0 1rem 0;
+}
+
+/* Recent Content */
+.recent-content {
+  padding: 5rem 0;
+  background: var(--bg-secondary);
+}
+
+.post-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+/* Animations */
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {transform: translateY(0) translateX(-50%);}
+  40% {transform: translateY(-20px) translateX(-50%);}
+  60% {transform: translateY(-10px) translateX(-50%);}
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2.5rem;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.1rem;
+  }
+  
+  .knowledge-grid-section,
+  .value-props,
+  .recent-content {
+    padding: 3rem 0;
+  }
+  
+  .section-title {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-content {
+    padding: 1.5rem;
+  }
+  
+  .hero-title {
+    font-size: 2rem;
+  }
+  
+  .props-grid,
+  .pathway-grid,
+  .post-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+
+<script>
+// Animate hero elements on load
+document.addEventListener('DOMContentLoaded', function() {
+  const heroContent = document.querySelector('.hero-content');
+  if(heroContent) {
+    heroContent.style.opacity = '0';
+    heroContent.style.transform = 'translateY(20px)';
+    heroContent.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+    
+    setTimeout(() => {
+      heroContent.style.opacity = '1';
+      heroContent.style.transform = 'translateY(0)';
+    }, 300);
+  }
+  
+  // Smooth scroll for indicator
+  const scrollIndicator = document.querySelector('.hero-scroll-indicator');
+  if(scrollIndicator) {
+    scrollIndicator.addEventListener('click', function() {
+      window.scrollTo({
+        top: document.querySelector('.knowledge-grid-section').offsetTop,
+        behavior: 'smooth'
+      });
+    });
+  }
+});
+</script>

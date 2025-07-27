@@ -1,32 +1,178 @@
-// Core variables
-$primary: #7c3aed;
-$secondary: #10b981;
-$dark: #0f172a;
-$light: #f8fafc;
+// ========================
+//  Core Variables
+// ========================
+$breakpoints: (
+  'xs': 480px,
+  'sm': 640px,
+  'md': 768px,
+  'lg': 1024px,
+  'xl': 1280px
+);
 
-// Base styles
-@import "normalize";
-@import "base/typography";
-@import "base/utilities";
-@import "base/animations";
+$colors: (
+  'primary': #4f46e5,
+  'primary-light': #a78bfa,
+  'secondary': #10b981,
+  'accent': #f59e0b,
+  'dark': #111827,
+  'light': #f9fafb,
+  'gray': #6b7280,
+  'success': #10b981,
+  'warning': #f59e0b,
+  'danger': #ef4444
+);
 
-// Layout
-@import "layout/grid";
-@import "layout/header";
-@import "layout/footer";
-@import "layout/sidebar";
+$spacing: (
+  '0': 0,
+  '1': 0.25rem,
+  '2': 0.5rem,
+  '3': 0.75rem,
+  '4': 1rem,
+  '5': 1.5rem,
+  '6': 2rem,
+  '7': 3rem,
+  '8': 4rem,
+  '9': 6rem
+);
 
-// Components
-@import "components/buttons";
-@import "components/cards";
-@import "components/forms";
-@import "components/navigation";
+$font-sizes: (
+  'xs': 0.75rem,
+  'sm': 0.875rem,
+  'base': 1rem,
+  'lg': 1.125rem,
+  'xl': 1.25rem,
+  '2xl': 1.5rem,
+  '3xl': 1.875rem,
+  '4xl': 2.25rem,
+  '5xl': 3rem,
+  '6xl': 3.75rem
+);
 
-// Effects
-@import "effects/particles";
-@import "effects/tilt";
-@import "effects/floating";
+// ========================
+//  Mixins & Functions
+// ========================
+@mixin breakpoint($size) {
+  @media (min-width: map-get($breakpoints, $size)) {
+    @content;
+  }
+}
 
-// Pages
-@import "pages/home";
-@import "pages/post";
+@function color($name) {
+  @return map-get($colors, $name);
+}
+
+@function spacing($size) {
+  @return map-get($spacing, $size);
+}
+
+@function font-size($size) {
+  @return map-get($font-sizes, $size);
+}
+
+// ========================
+//  Base Styles
+// ========================
+:root {
+  @each $name, $color in $colors {
+    --color-#{$name}: #{$color};
+  }
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 
+               Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  line-height: 1.6;
+  color: color('dark');
+  background-color: white;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dark-mode {
+  --color-dark: #f3f4f6;
+  --color-light: #1f2937;
+  background-color: color('dark');
+  color: color('light');
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: spacing('4');
+}
+
+a {
+  color: color('primary');
+  text-decoration: none;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: color('primary-light');
+  }
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+// ========================
+//  Utility Classes
+// ========================
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 spacing('4');
+
+  @include breakpoint('md') {
+    padding: 0 spacing('5');
+  }
+}
+
+.section {
+  padding: spacing('7') 0;
+
+  @include breakpoint('md') {
+    padding: spacing('8') 0;
+  }
+}
+
+// ========================
+//  Components
+// ========================
+@import 'components/buttons';
+@import 'components/cards';
+@import 'components/forms';
+@import 'components/navigation';
+@import 'components/footer';
+@import 'components/animations';
+
+// ========================
+//  Layouts
+// ========================
+@import 'layouts/header';
+@import 'layouts/home';
+@import 'layouts/page';
+@import 'layouts/post';
+
+// ========================
+//  Vendor Overrides
+// ========================
+@import 'vendor/syntax-highlighting';
+@import 'vendor/tooltips';
+
+// ========================
+//  Theme Extensions
+// ========================
+@import 'theme/dark-mode';
+@import 'theme/print-styles';

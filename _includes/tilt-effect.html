@@ -1,21 +1,88 @@
-{% if site.synapse.effects.tilt_cards %}
+<!-- 
+  Tilt.js Effect Integration
+  Usage: Add 'data-tilt' attribute to any element
+         or {% include tilt-effect.html target=".feature-card" %}
+-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tilt.js/1.2.1/tilt.jquery.min.js"></script>
+
 <script>
-if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-  // Load only when needed
-  if (document.querySelectorAll('[data-tilt]').length > 0) {
-    var script = document.createElement('script');
-    script.src = "https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.2/vanilla-tilt.min.js";
-    script.onload = function() {
-      VanillaTilt.init(document.querySelectorAll("[data-tilt]"), {
-        max: {{ site.synapse.effects.tilt_intensity | default: 15 }},
-        speed: 400,
-        glare: true,
-        "max-glare": 0.2,
-        gyroscope: false // Better performance
-      });
+document.addEventListener('DOMContentLoaded', function() {
+  // Initialize with vanilla JS if jQuery not available
+  if(!window.jQuery) {
+    const script = document.createElement('script');
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js';
+    script.onload = initTiltEffect;
+    document.head.appendChild(script);
+  } else {
+    initTiltEffect();
+  }
+
+  function initTiltEffect() {
+    // Default configuration
+    const defaultSettings = {
+      reverse: true,
+      max: 8,
+      perspective: 1000,
+      scale: 1.03,
+      speed: 500,
+      transition: true,
+      glare: true,
+      "max-glare": 0.15,
+      "glare-prerender": false,
+      gyroscope: true,
+      gyroscopeMinAngleX: -15,
+      gyroscopeMaxAngleX: 15,
+      gyroscopeMinAngleY: -15,
+      gyroscopeMaxAngleY: 15
     };
-    document.body.appendChild(script);
+
+    // Initialize based on detection
+    if(window.jQuery) {
+      // jQuery version
+      $('[data-tilt]').tilt(defaultSettings);
+      {% if include.target %}
+      $('{{ include.target }}').tilt(defaultSettings);
+      {% endif %}
+    } else {
+      // Vanilla JS version
+      {% if include.target %}
+      VanillaTilt.init(document.querySelectorAll('{{ include.target }}'), defaultSettings);
+      {% else %}
+      VanillaTilt.init(document.querySelectorAll('[data-tilt]'), defaultSettings);
+      {% endif %}
+    }
+  }
+});
+</script>
+
+<style>
+/* Base tilt styles */
+[data-tilt], .tilt-enabled {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* Glare effect adjustments */
+.js-tilt-glare {
+  border-radius: inherit;
+}
+
+/* Performance optimizations */
+@media (prefers-reduced-motion: reduce) {
+  [data-tilt], .tilt-enabled {
+    transform: none !important;
   }
 }
-</script>
-{% endif %}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  [data-tilt], .tilt-enabled {
+    transform: none !important;
+  }
+  
+  /* Disable tilt on mobile by default */
+  .tilt-disabled-mobile {
+    transform: none !important;
+  }
+}
+</style>

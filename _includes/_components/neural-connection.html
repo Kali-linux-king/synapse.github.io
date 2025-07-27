@@ -1,6 +1,258 @@
-<!-- /_includes/_components/neural-connection.html -->
-<neural-connection 
-  source="{{ page.url }}" 
-  strength="0.8"
-  direction="bidirectional">
-</neural-connection>
+<!-- 
+  Interactive Neural Network Visualization
+  Usage: {% include _components/neural-connection.html 
+            nodes=80 
+            connections=0.3
+            pulseSpeed=0.02
+            colorScheme="synapse" 
+          %}
+-->
+<canvas id="neural-network" 
+        class="neural-network-viz" 
+        aria-hidden="true"
+        data-nodes="{{ include.nodes | default: 60 }}"
+        data-connections="{{ include.connections | default: 0.25 }}"
+        data-pulse-speed="{{ include.pulseSpeed | default: 0.015 }}"
+        data-color-scheme="{{ include.colorScheme | default: 'synapse' }}"></canvas>
+
+<script type="module">
+class NeuralNetwork {
+  constructor(canvas) {
+    this.canvas = canvas;
+    this.ctx = canvas.getContext('2d');
+    this.nodes = [];
+    this.connections = [];
+    this.pulsePhase = 0;
+    this.resizeObserver = null;
+    
+    // Configuration with defaults
+    this.config = {
+      nodeCount: parseInt(canvas.dataset.nodes),
+      connectionDensity: parseFloat(canvas.dataset.connections),
+      pulseSpeed: parseFloat(canvas.dataset.pulseSpeed),
+      colorScheme: canvas.dataset.colorScheme,
+      nodeRadius: 1.5,
+      lineWidth: 0.8
+    };
+    
+    this.init();
+  }
+
+  init() {
+    this.setupCanvas();
+    this.createNodes();
+    this.createConnections();
+    this.setupEventListeners();
+    this.animate();
+  }
+
+  setupCanvas() {
+    this.resizeCanvas();
+    window.addEventListener('resize', this.debounce(() => this.resizeCanvas()));
+    
+    // High-DPI display support
+    const dpr = window.devicePixelRatio || 1;
+    this.ctx.scale(dpr, dpr);
+  }
+
+  createNodes() {
+    this.nodes = Array.from({ length: this.config.nodeCount }, () => ({
+      x: Math.random() * this.canvas.width,
+      y: Math.random() * this.canvas.height,
+      radius: 2 + Math.random() * this.config.nodeRadius,
+      pulse: Math.random() * Math.PI * 2
+    }));
+  }
+
+  createConnections() {
+    this.connections = [];
+    this.nodes.forEach((a, i) => {
+      this.nodes.slice(i + 1).forEach((b, j) => {
+        if (Math.random() < this.config.connectionDensity) {
+          const distance = Math.sqrt(
+            Math.pow(a.x - b.x, 2) + 
+            Math.pow(a.y - b.y, 2)
+          );
+          this.connections.push({
+            a, b,
+            strength: 1 - Math.min(distance / 200, 0.9),
+            pulseOffset: Math.random() * Math.PI * 2
+          });
+        }
+      });
+    });
+  }
+
+  getColorScheme() {
+    const schemes = {
+      synapse: {
+        node: '#4f46e5',
+        connection: 'rgba(79, 70, 229, 0.15)',
+        pulse: '#a78bfa'
+      },
+      quantum: {
+        node: '#3b82f6',
+        connection: 'rgba(59, 130, 246, 0.1)',
+        pulse: '#93c5fd'
+      },
+      bio: {
+        node: '#10b981',
+        connection: 'rgba(16, 185, 129, 0.1)',
+        pulse: '#6ee7b7'
+      }
+    };
+    return schemes[this.config.colorScheme] || schemes.synapse;
+  }
+
+  animate() {
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    
+    // Update pulse phase
+    this.pulsePhase = (this.pulsePhase + this.config.pulseSpeed) % (Math.PI * 2);
+    
+    // Draw connections first
+    this.drawConnections();
+    
+    // Then draw nodes on top
+    this.drawNodes();
+    
+    requestAnimationFrame(() => this.animate());
+  }
+
+  drawConnections() {
+    const colors = this.getColorScheme();
+    
+    this.connections.forEach(conn => {
+      const pulseIntensity = 0.5 + 0.5 * Math.sin(this.pulsePhase + conn.pulseOffset);
+      
+      this.ctx.beginPath();
+      this.ctx.moveTo(conn.a.x, conn.a.y);
+      this.ctx.lineTo(conn.b.x, conn.b.y);
+      this.ctx.strokeStyle = this.lerpColor(
+        colors.connection, 
+        colors.pulse, 
+        pulseIntensity * conn.strength
+      );
+      this.ctx.lineWidth = this.config.lineWidth * (0.5 + 0.5 * conn.strength);
+      this.ctx.stroke();
+    });
+  }
+
+  drawNodes() {
+    const colors = this.getColorScheme();
+    
+    this.nodes.forEach(node => {
+      // Update node pulse
+      node.pulse = (node.pulse + 0.005) % (Math.PI * 2);
+      const pulseIntensity = 0.5 + 0.5 * Math.sin(node.pulse);
+      
+      // Draw glow
+      const gradient = this.ctx.createRadialGradient(
+        node.x, node.y, 0,
+        node.x, node.y, node.radius * 3
+      );
+      gradient.addColorStop(0, colors.pulse);
+      gradient.addColorStop(0.7, colors.node);
+      gradient.addColorStop(1, 'transparent');
+      
+      this.ctx.beginPath();
+      this.ctx.arc(node.x, node.y, node.radius * 3, 0, Math.PI * 2);
+      this.ctx.fillStyle = gradient;
+      this.ctx.fill();
+      
+      // Draw core node
+      this.ctx.beginPath();
+      this.ctx.arc(node.x, node.y, node.radius * (0.8 + 0.4 * pulseIntensity), 0, Math.PI * 2);
+      this.ctx.fillStyle = colors.node;
+      this.ctx.fill();
+    });
+  }
+
+  lerpColor(color1, color2, amount) {
+    // Simple RGBA color interpolation
+    if (color1.startsWith('rgba')) {
+      const [r1, g1, b1, a1] = color1.match(/[\d.]+/g).map(Number);
+      const [r2, g2, b2, a2] = color2.match(/[\d.]+/g).map(Number);
+      
+      return `rgba(
+        ${Math.round(r1 + (r2 - r1) * amount)},
+        ${Math.round(g1 + (g2 - g1) * amount)},
+        ${Math.round(b1 + (b2 - b1) * amount)},
+        ${a1 + (a2 - a1) * amount}
+      )`;
+    } else {
+      // Hex color fallback
+      return amount < 0.5 ? color1 : color2;
+    }
+  }
+
+  resizeCanvas() {
+    const container = this.canvas.parentElement;
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+    
+    // Set display size
+    this.canvas.style.width = `${width}px`;
+    this.canvas.style.height = `${height}px`;
+    
+    // Set actual size
+    const dpr = window.devicePixelRatio || 1;
+    this.canvas.width = width * dpr;
+    this.canvas.height = height * dpr;
+    
+    // Scale context
+    this.ctx.scale(dpr, dpr);
+  }
+
+  debounce(func, timeout = 100) {
+    let timer;
+    return (...args) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => func.apply(this, args), timeout);
+    };
+  }
+}
+
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+  const canvas = document.getElementById('neural-network');
+  if (canvas) new NeuralNetwork(canvas);
+});
+</script>
+
+<style>
+.neural-network-viz {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  opacity: 0.15;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+/* Contextual opacity adjustments */
+.dark-mode .neural-network-viz {
+  opacity: 0.25;
+}
+
+.hero-section .neural-network-viz {
+  opacity: 0.2;
+}
+
+/* Performance optimizations */
+@media (prefers-reduced-motion: reduce) {
+  .neural-network-viz {
+    display: none;
+  }
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .neural-network-viz {
+    opacity: 0.1;
+  }
+}
+</style>

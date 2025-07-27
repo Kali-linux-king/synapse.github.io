@@ -1,17 +1,194 @@
-<!-- Main JS Bundle -->
-<script src="/assets/js/bundle.js" defer></script>
-
-<!-- Theme-specific scripts -->
-{% include particles-js.html %}
-{% include tilt-effect.html %}
-
-<!-- Analytics -->
-{% if site.google_analytics %}
-<script async src="https://www.googletagmanager.com/gtag/js?id={{ site.google_analytics }}"></script>
+<!-- 
+  Global Scripts Include
+  Features: - Progressive loading
+            - Analytics integration
+            - Performance monitoring
+            - Optional feature flags
+-->
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', '{{ site.google_analytics }}', { 'anonymize_ip': true });
+// Feature detection and browser support checks
+window.supports = {
+  passiveEvents: (function() {
+    let supportsPassive = false;
+    try {
+      const opts = Object.defineProperty({}, 'passive', {
+        get: function() { supportsPassive = true; }
+      });
+      window.addEventListener('test', null, opts);
+    } catch (e) {}
+    return supportsPassive;
+  })(),
+  intersectionObserver: 'IntersectionObserver' in window,
+  webp: (function() {
+    const elem = document.createElement('canvas');
+    return elem.getContext && elem.getContext('2d') 
+      ? elem.toDataURL('image/webp').indexOf('data:image/webp') === 0 
+      : false;
+  })()
+};
 </script>
-{% endif %}
+
+<!-- Load critical scripts first -->
+<script defer src="{{ '/assets/js/main.js' | relative_url }}"></script>
+
+<!-- Feature-loaded scripts -->
+<script>
+// Progressive enhancement loader
+document.addEventListener('DOMContentLoaded', function() {
+  // Load non-critical scripts
+  const loadScript = (src, attrs = {}) => {
+    const script = document.createElement('script');
+    script.src = src;
+    Object.entries(attrs).forEach(([key, val]) => script.setAttribute(key, val));
+    document.body.appendChild(script);
+  };
+
+  // Load analytics if consent given
+  if(localStorage.getItem('analyticsConsent') === 'true') {
+    // Plausible Analytics (privacy-focused alternative to GA)
+    loadScript('https://plausible.io/js/script.js', {
+      'data-domain': 'yourdomain.com',
+      'defer': true
+    });
+
+    // Hotjar (optional)
+    if(window.location.hostname === 'synapse.github.io') {
+      loadScript('https://static.hotjar.com/c/hotjar-1234567.js?sv=6');
+    }
+  }
+
+  // Load WebGL components if supported
+  if(document.querySelector('[data-needs-webgl]') && 
+     (window.WebGLRenderingContext || window.WebGL2RenderingContext)) {
+    loadScript('{{ "/assets/js/webgl-components.js" | relative_url }}');
+  }
+
+  // Load comment system when scrolled to
+  if(document.getElementById('comments-section') && 
+     window.supports.intersectionObserver) {
+    const observer = new IntersectionObserver((entries) => {
+      if(entries[0].isIntersecting) {
+        loadScript('https://comments.example.com/embed.js');
+        observer.disconnect();
+      }
+    });
+    observer.observe(document.getElementById('comments-section'));
+  }
+});
+
+// Error tracking
+window.addEventListener('error', function(e) {
+  if(typeof navigator.sendBeacon === 'function') {
+    const data = new FormData();
+    data.append('error', e.message);
+    data.append('file', e.filename);
+    data.append('line', e.lineno);
+    data.append('col', e.colno);
+    navigator.sendBeacon('/error-log', data);
+  }
+});
+</script>
+
+<!-- Cookie consent placeholder -->
+<div id="cookie-consent" class="cookie-consent-banner" hidden>
+  <div class="cookie-content">
+    <p>We use cookies to enhance your experience. By continuing you agree to our 
+      <a href="/privacy#cookies">Cookie Policy</a>.</p>
+    <div class="cookie-buttons">
+      <button id="accept-cookies" class="cookie-button accept">Accept</button>
+      <button id="reject-cookies" class="cookie-button reject">Reject</button>
+    </div>
+  </div>
+</div>
+
+<style>
+/* Cookie consent styles */
+.cookie-consent-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #111827;
+  color: white;
+  padding: 1rem;
+  z-index: 1000;
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+  animation: slideUp 0.5s ease;
+}
+
+.cookie-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.cookie-content p {
+  margin: 0;
+  flex: 1;
+  min-width: 300px;
+  font-size: 0.9rem;
+}
+
+.cookie-content a {
+  color: #a5b4fc;
+  text-decoration: underline;
+}
+
+.cookie-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.cookie-button {
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.cookie-button.accept {
+  background: #4f46e5;
+  color: white;
+}
+
+.cookie-button.reject {
+  background: transparent;
+  color: white;
+  border: 1px solid #4b5563;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+</style>
+
+<script>
+// Cookie consent management
+document.addEventListener('DOMContentLoaded', function() {
+  const consentBanner = document.getElementById('cookie-consent');
+  const acceptBtn = document.getElementById('accept-cookies');
+  const rejectBtn = document.getElementById('reject-cookies');
+  
+  // Only show if no consent decision exists
+  if(!localStorage.getItem('analyticsConsent')) {
+    consentBanner.hidden = false;
+    
+    acceptBtn.addEventListener('click', function() {
+      localStorage.setItem('analyticsConsent', 'true');
+      consentBanner.style.display = 'none';
+      window.location.reload();
+    });
+    
+    rejectBtn.addEventListener('click', function() {
+      localStorage.setItem('analyticsConsent', 'false');
+      consentBanner.style.display = 'none';
+    });
+  }
+});
+</script>

@@ -1,55 +1,59 @@
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="theme-color" content="{{ site.ui.theme_color | default: '#7c3aed' }}">
-
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
   <!-- Primary Meta Tags -->
-  <title>
-    {% if page.title %}
-      {{ page.title | escape }} | {{ site.title | escape }}
-    {% else %}
-      {{ site.title | escape }} | {{ site.tagline | escape }}
-    {% endif %}
-  </title>
-  <meta name="description" content="{{ page.description | default: site.description | strip_html | normalize_whitespace | truncate: 160 }}">
-  <meta name="author" content="{{ site.author.name }}">
-
-  <!-- Preload Critical Resources -->
+  <title>{% if page.title %}{{ page.title }} | {% endif %}{{ site.title }}</title>
+  <meta name="description" content="{{ page.description | default: site.description }}">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{{ site.url }}{{ page.url }}">
+  <meta property="og:title" content="{{ page.title | default: site.title }}">
+  <meta property="og:description" content="{{ page.description | default: site.description }}">
+  <meta property="og:image" content="{{ site.url }}/assets/images/social-share.png">
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@{{ site.author.social_links.twitter }}">
+  <meta name="twitter:creator" content="@{{ site.author.social_links.twitter }}">
+  
+  <!-- Preload Critical Assets -->
   <link rel="preload" href="{{ '/assets/css/main.css' | relative_url }}" as="style">
-  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" crossorigin>
-  {% if site.synapse.effects.particles %}
-  <link rel="preload" href="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js" as="script" crossorigin>
-  {% endif %}
-
+  <link rel="preload" href="{{ '/assets/js/main.js' | relative_url }}" as="script">
+  
+  <!-- Favicon & Theme Color -->
+  <link rel="icon" href="{{ '/assets/favicon.ico' | relative_url }}">
+  <link rel="icon" href="{{ '/assets/images/favicon.svg' | relative_url }}" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="{{ '/assets/images/apple-touch-icon.png' | relative_url }}">
+  <meta name="theme-color" content="#4f46e5">
+  
   <!-- CSS -->
   <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-  <!-- Favicon -->
-  <link rel="apple-touch-icon" sizes="180x180" href="{{ '/assets/favicon/apple-touch-icon.png' | relative_url }}">
-  <link rel="icon" type="image/png" sizes="32x32" href="{{ '/assets/favicon/favicon-32x32.png' | relative_url }}">
-  <link rel="icon" type="image/png" sizes="16x16" href="{{ '/assets/favicon/favicon-16x16.png' | relative_url }}">
-  <link rel="manifest" href="{{ '/assets/favicon/site.webmanifest' | relative_url }}">
-
+  
+  <!-- Font Awesome (for monetization icons) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
+    integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" 
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  
   <!-- Canonical URL -->
-  <link rel="canonical" href="{{ page.url | replace:'index.html','' | absolute_url }}">
-
-  <!-- SEO -->
-  {% seo title=false %}
-  <meta property="og:type" content="{% if page.layout == 'post' %}article{% else %}website{% endif %}">
-  <meta property="og:image" content="{{ page.image | default: site.seo.image | absolute_url }}">
-  <meta property="og:image:alt" content="{{ page.title | default: site.title }}">
-
-  <!-- Twitter Cards -->
-  <meta name="twitter:card" content="{{ site.seo.twitter_card | default: 'summary_large_image' }}">
-  {% if site.social.twitter %}
-  <meta name="twitter:site" content="@{{ site.social.twitter | replace: '@', '' }}">
+  <link rel="canonical" href="{{ site.url }}{{ page.url }}">
+  
+  <!-- Affiliate Tracking (if enabled) -->
+  {% if page.monetization.enabled %}
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXX"></script>
+  <script>
+    (adsbygoogle = window.adsbygoogle || []).push({
+      google_ad_client: "ca-pub-XXXXX",
+      enable_page_level_ads: true
+    });
+  </script>
   {% endif %}
-
-  <!-- Theme Color Meta -->
-  <meta name="theme-color" content="{{ site.ui.theme_color | default: '#7c3aed' }}" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="{{ site.ui.dark_theme_color | default: '#0f172a' }}" media="(prefers-color-scheme: dark)">
-
+  
+  <!-- Plausible Analytics (privacy-friendly alternative to GA) -->
+  <script defer data-domain="yourdomain.com" src="https://plausible.io/js/script.js"></script>
+  
   <!-- Structured Data -->
   <script type="application/ld+json">
     {
@@ -63,16 +67,5 @@
         "query-input": "required name=search_term_string"
       }
     }
-  </script>
-
-  <!-- Dark Mode Script (Early Load) -->
-  <script>
-    // Apply theme class before DOM renders to prevent flash
-    (function() {
-      const storedTheme = localStorage.getItem('theme');
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const theme = storedTheme || (prefersDark ? 'dark' : 'light');
-      document.documentElement.classList.toggle('dark', theme === 'dark');
-    })();
   </script>
 </head>

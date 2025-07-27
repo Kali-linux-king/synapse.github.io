@@ -1,38 +1,313 @@
-<footer class="footer" role="contentinfo">
-  <div class="container">
+<footer class="site-footer">
+  <div class="footer-container container">
+    <!-- Main Footer Columns -->
     <div class="footer-grid">
+      <!-- About Column -->
       <div class="footer-col">
-        <h3 class="footer-title">Explore</h3>
-        <ul class="footer-links">
-          <li><a href="/archive">Archive</a></li>
-          <li><a href="/tags">Topics</a></li>
-          <li><a href="/search">Search</a></li>
-        </ul>
-      </div>
-      
-      <div class="footer-col">
-        <h3 class="footer-title">Connect</h3>
-        <div class="social-links">
-          {% if site.github_username %}
-          <a href="https://github.com/{{ site.github_username }}" aria-label="GitHub">
-            <i class="fab fa-github"></i>
-          </a>
+        <h3 class="footer-title">{{ site.title }}</h3>
+        <p class="footer-description">{{ site.description }}</p>
+        <div class="footer-social">
+          {% if site.author.social_links.github %}
+            <a href="https://github.com/{{ site.author.social_links.github }}" aria-label="GitHub">
+              <i class="fab fa-github"></i>
+            </a>
           {% endif %}
-          {% if site.twitter_username %}
-          <a href="https://twitter.com/{{ site.twitter_username }}" aria-label="Twitter">
-            <i class="fab fa-twitter"></i>
-          </a>
+          {% if site.author.social_links.twitter %}
+            <a href="https://twitter.com/{{ site.author.social_links.twitter }}" aria-label="Twitter">
+              <i class="fab fa-twitter"></i>
+            </a>
           {% endif %}
         </div>
       </div>
+
+      <!-- Quick Links -->
+      <div class="footer-col">
+        <h3 class="footer-title">Explore</h3>
+        <ul class="footer-links">
+          <li><a href="/topics">Topics</a></li>
+          <li><a href="/resources">Resources</a></li>
+          <li><a href="/premium">Premium Content</a></li>
+          <li><a href="/about">About</a></li>
+        </ul>
+      </div>
+
+      <!-- Monetization Column -->
+      <div class="footer-col">
+        <h3 class="footer-title">Support Us</h3>
+        <div class="monetization-options">
+          <a href="{{ site.monetization.support_links[0].url }}" class="support-option">
+            <i class="fas fa-coffee"></i> Buy Me a Coffee
+          </a>
+          <a href="/sponsors" class="support-option">
+            <i class="fas fa-star"></i> Become a Sponsor
+          </a>
+          <a href="/affiliates" class="support-option">
+            <i class="fas fa-link"></i> Affiliate Program
+          </a>
+        </div>
+      </div>
+
+      <!-- Newsletter -->
+      <div class="footer-col">
+        <h3 class="footer-title">Newsletter</h3>
+        <form class="newsletter-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+          <input type="email" name="email" placeholder="Your email" required>
+          <button type="submit" class="newsletter-button">
+            <i class="fas fa-paper-plane"></i> Subscribe
+          </button>
+        </form>
+        <small>Get weekly curated resources (No spam)</small>
+      </div>
     </div>
 
+    <!-- Legal & Copyright -->
     <div class="footer-bottom">
-      <p>&copy; {{ site.time | date: '%Y' }} {{ site.title }}. All knowledge is interconnected.</p>
-      <p class="footer-credits">
-        Built with <a href="https://jekyllrb.com" target="_blank">Jekyll</a> and 
-        <span class="love" aria-hidden="true">♥</span>
-      </p>
+      <div class="legal-links">
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/cookies">Cookie Policy</a>
+        {% if page.monetization.enabled %}
+          <a href="/affiliate-disclosure">Affiliate Disclosure</a>
+        {% endif %}
+      </div>
+      <div class="copyright">
+        &copy; {{ 'now' | date: "%Y" }} {{ site.title }}. All rights reserved.
+      </div>
     </div>
   </div>
+
+  <!-- Back to Top Button -->
+  <button class="back-to-top" aria-label="Back to top">
+    <i class="fas fa-arrow-up"></i>
+  </button>
 </footer>
+
+<style>
+/* ========================
+   FOOTER STYLES
+   ======================== */
+.site-footer {
+  background: #111827;
+  color: #f3f4f6;
+  padding: 3rem 0 1.5rem;
+  position: relative;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.footer-col {
+  margin-bottom: 1.5rem;
+}
+
+.footer-title {
+  color: white;
+  font-size: 1.1rem;
+  margin-bottom: 1.2rem;
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+
+.footer-title::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 40px;
+  height: 2px;
+  background: #4f46e5;
+}
+
+.footer-description {
+  color: #9ca3af;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.footer-social a {
+  color: #d1d5db;
+  font-size: 1.2rem;
+  margin-right: 1rem;
+  transition: color 0.3s ease;
+}
+
+.footer-social a:hover {
+  color: #4f46e5;
+}
+
+.footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links li {
+  margin-bottom: 0.6rem;
+}
+
+.footer-links a {
+  color: #d1d5db;
+  text-decoration: none;
+  transition: color 0.3s ease;
+  font-size: 0.95rem;
+}
+
+.footer-links a:hover {
+  color: #4f46e5;
+}
+
+.monetization-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.support-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #d1d5db;
+  text-decoration: none;
+  transition: color 0.3s ease;
+  font-size: 0.95rem;
+}
+
+.support-option:hover {
+  color: #4f46e5;
+}
+
+.support-option i {
+  width: 20px;
+  text-align: center;
+}
+
+.newsletter-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.newsletter-form input {
+  flex: 1;
+  padding: 0.6rem;
+  border: none;
+  border-radius: 4px;
+  background: #1f2937;
+  color: white;
+}
+
+.newsletter-button {
+  background: #4f46e5;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.newsletter-button:hover {
+  background: #4338ca;
+}
+
+.footer-bottom {
+  border-top: 1px solid #1f2937;
+  padding-top: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  color: #9ca3af;
+}
+
+.legal-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.legal-links a {
+  color: #9ca3af;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.legal-links a:hover {
+  color: #4f46e5;
+}
+
+.back-to-top {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 40px;
+  height: 40px;
+  background: #4f46e5;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.back-to-top.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+@media (max-width: 768px) {
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .footer-bottom {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .legal-links {
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
+}
+</style>
+
+<script>
+// Back to Top Button
+document.addEventListener('DOMContentLoaded', function() {
+  const backToTopButton = document.querySelector('.back-to-top');
+  
+  window.addEventListener('scroll', function() {
+    if (window.pageYOffset > 300) {
+      backToTopButton.classList.add('visible');
+    } else {
+      backToTopButton.classList.remove('visible');
+    }
+  });
+  
+  backToTopButton.addEventListener('click', function() {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  });
+});
+</script>

@@ -1,49 +1,140 @@
 ---
 layout: page
-title: "About SYNAPSE: Our Mission to Interconnect Knowledge"
-description: "Learn about SYNAPSE's mission to synthesize knowledge in AI, Cybersecurity, and Emerging Technologies for deeper understanding and innovation."
-subtitle: "Transforming Information into Insight"
-permalink: /about/
+title: "About Synapse"
+description: "Our mission to connect knowledge and support open learning"
+monetization:
+  support_links:
+    - text: "Support us on Ko-fi"
+      url: "https://ko-fi.com/yourusername"
+      icon: "fas fa-coffee"
+    - text: "Become a sponsor"
+      url: "/sponsors"
+      icon: "fas fa-hand-holding-heart"
 ---
 
-## Our Vision
+<div class="about-container">
 
-At **SYNAPSE**, we envision a future where complex knowledge is not siloed but intricately connected. In a rapidly evolving technological landscape, true understanding and groundbreaking innovation emerge when insights from diverse fields are synthesized into a coherent whole. We are dedicated to building a dynamic platform that illuminates the profound relationships between **Artificial Intelligence**, **Cybersecurity**, and **Emerging Technologies**.
+![Synapse Knowledge Network](/assets/images/synapse-network.png){: .about-hero }
 
 ## Our Mission
 
-Our mission is to empower professionals, researchers, and curious minds with the interconnected knowledge needed to navigate and shape the future. We achieve this by:
+Synapse is an open knowledge hub dedicated to **interconnecting ideas** across disciplines. We combine:
 
-* **Curating Expert Content:** Providing high-quality, meticulously researched articles, whitepapers, and analyses that delve into the core concepts and latest advancements across our focus areas.
-* **Fostering Interdisciplinary Understanding:** Highlighting the synergies and dependencies between AI, Cybersecurity, and Emerging Technologies, demonstrating how progress in one domain influences others.
-* **Delivering Practical Insights:** Offering tutorials, case studies, and practical guides that translate theoretical knowledge into actionable skills and solutions.
-* **Building a Community:** Creating a collaborative space where ideas can be exchanged, questions can be explored, and a collective intelligence can thrive.
+- 🧠 **Curated insights** from experts
+- 🔗 **Intelligent connections** between concepts
+- 💡 **Practical resources** for continuous learning
 
-## What We Offer
+<div class="monetization-notice">
+{% include affiliate-disclaimer.html %}
+</div>
 
-SYNAPSE is your comprehensive resource for:
+## The Team
 
-* **In-depth Articles:** Explore our extensive library of content covering everything from foundational principles to cutting-edge research in AI, Cybersecurity, and Emerging Tech.
-* **Practical Tutorials:** Learn new skills with our step-by-step guides, designed for various expertise levels.
-* **Project Spotlights:** Discover real-world applications and innovative projects that exemplify the power of interconnected technologies.
-* **Thought Leadership:** Gain perspectives from industry experts and researchers on the future trends and ethical considerations shaping technology.
+<div class="team-grid">
 
-## Join the SYNAPSE Network
+<div class="team-member">
+![Your Name](/assets/images/team/yourname.jpg){: .avatar }
+### Your Name
+<small>Founder & Curator</small>
+<div class="social-links">
+<a href="https://github.com/yourusername"><i class="fab fa-github"></i></a>
+<a href="https://twitter.com/yourhandle"><i class="fab fa-twitter"></i></a>
+</div>
+</div>
 
-We believe that knowledge grows when shared and connected. Whether you're a seasoned expert, a student, or simply curious about the frontiers of technology, SYNAPSE offers the insights and community to expand your understanding.
+<!-- Add more team members as needed -->
 
-[**Explore Our Latest Articles**](/articles/)
-[**Connect With Us**](/contact/) ```
+</div>
 
-**Key elements and why they're included:**
+## Support Our Work
 
-* **`layout: page`**: Ensures this content is wrapped by your newly created `_layouts/page.html`, giving it a consistent look and feel with other static pages.
-* **`title` and `description`**: Essential for SEO. The title clearly states the page's content, and the description provides a concise summary for search engines.
-* **`subtitle`**: Leverages the `page.subtitle` variable you included in `_layouts/page.html` for a brief tagline under the main title.
-* **`permalink: /about/`**: Ensures your "About" page is accessible at `yoursite.com/about/`, which is a clean and common URL structure.
-* **Clear Headings (`## Our Vision`, `## Our Mission`, etc.)**: Improves readability and helps search engines understand the page structure.
-* **Keyword Integration**: Naturally uses terms like "Artificial Intelligence," "Cybersecurity," "Emerging Technologies," "interconnect knowledge," "insights," "innovation," etc., which are relevant to your site's focus.
-* **Actionable Content**: Describes what SYNAPSE offers and provides calls to action (`[**Explore Our Latest Articles**](/articles/)`, `[**Connect With Us**](/contact/)`).
-* **Professional Tone**: Maintains a consistent, authoritative, and forward-looking voice.
+<div class="support-options">
+{% for link in page.monetization.support_links %}
+<a href="{{ link.url }}" class="support-button">
+<i class="{{ link.icon }}"></i> {{ link.text }}
+</a>
+{% endfor %}
+</div>
 
-After saving this file, remember to **restart your Jekyll server** again (`Ctrl + C` then `bundle exec jekyll serve`) to see the changes applied on your `/about/` page.
+</div>
+
+<style>
+/* About Page Styling */
+.about-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.about-hero {
+  width: 100%;
+  border-radius: 8px;
+  margin: 2rem 0;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin: 3rem 0;
+}
+
+.team-member {
+  text-align: center;
+  padding: 1.5rem;
+  background: #f9f9f9;
+  border-radius: 8px;
+}
+
+.avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 1rem;
+  border: 3px solid #4f46e5;
+}
+
+.social-links {
+  margin-top: 1rem;
+}
+
+.social-links a {
+  color: #4f46e5;
+  margin: 0 0.5rem;
+  font-size: 1.2rem;
+}
+
+.support-options {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin: 2rem 0;
+}
+
+.support-button {
+  padding: 0.8rem 1.5rem;
+  background: #4f46e5;
+  color: white;
+  border-radius: 4px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.monetization-notice {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 4px;
+  margin: 2rem 0;
+  border-left: 4px solid #4f46e5;
+}
+
+@media (max-width: 768px) {
+  .team-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>

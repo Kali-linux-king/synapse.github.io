@@ -1,0 +1,209 @@
+<!-- 
+  Post Tags Component
+  Usage: {% include post-tags.html 
+            limit=5 
+            show_count=true
+            style="pill/chip/badge" 
+            color_scheme="rainbow/monochrome/category"
+          %}
+-->
+{% if page.tags.size > 0 %}
+<div class="post-tags-container" data-tags-count="{{ page.tags.size }}">
+  <h3 class="tags-title">
+    <i class="fas fa-tags"></i>
+    <span>Explore More</span>
+  </h3>
+  
+  <div class="tags-grid style-{{ include.style | default: 'pill' }} 
+                scheme-{{ include.color_scheme | default: 'rainbow' }}">
+    {% assign tags_limit = include.limit | default: 999 %}
+    {% assign tags_sorted = page.tags | sort %}
+    
+    {% for tag in tags_sorted limit: tags_limit %}
+      {% assign tag_posts = site.tags[tag] %}
+      <a href="{{ '/tags/' | relative_url }}#{{ tag | slugify }}" 
+         class="tag-link"
+         data-tag="{{ tag | slugify }}"
+         aria-label="View all {{ tag_posts.size }} posts tagged {{ tag }}">
+        <span class="tag-text">{{ tag }}</span>
+        {% if include.show_count %}
+          <span class="tag-count">{{ tag_posts.size }}</span>
+        {% endif %}
+      </a>
+    {% endfor %}
+    
+    {% if page.tags.size > tags_limit %}
+      <button class="show-more-tags" 
+              aria-expanded="false" 
+              aria-controls="hidden-tags">
+        +{{ page.tags.size | minus: tags_limit }} more
+      </button>
+      <div id="hidden-tags" class="hidden-tags" hidden>
+        {% for tag in tags_sorted offset: tags_limit %}
+          <a href="{{ '/tags/' | relative_url }}#{{ tag | slugify }}" 
+             class="tag-link"
+             data-tag="{{ tag | slugify }}">
+            {{ tag }}
+          </a>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+<style>
+/* ========================
+   TAGS COMPONENT STYLES
+   ======================== */
+.post-tags-container {
+  margin: 2rem 0 3rem;
+}
+
+.tags-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.1rem;
+  color: #4b5563;
+  margin-bottom: 1rem;
+}
+
+.tags-title i {
+  color: #4f46e5;
+}
+
+.tags-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+/* Tag Link Base Styles */
+.tag-link {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.tag-count {
+  margin-left: 0.3rem;
+  font-size: 0.7rem;
+  opacity: 0.8;
+}
+
+/* Style Variations */
+.style-pill .tag-link {
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+}
+
+.style-chip .tag-link {
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+}
+
+.style-badge .tag-link {
+  padding: 0.3rem 0.6rem;
+  border-radius: 3px;
+  border: 1px solid currentColor;
+}
+
+/* Color Schemes */
+.scheme-rainbow .tag-link {
+  background: var(--tag-bg);
+  color: var(--tag-text);
+}
+
+.scheme-monochrome .tag-link {
+  background: #f3f4f6;
+  color: #4b5563;
+}
+
+.scheme-monochrome .tag-link:hover {
+  background: #e5e7eb;
+}
+
+.scheme-category .tag-link {
+  background: #e0e7ff;
+  color: #3730a3;
+}
+
+.scheme-category .tag-link:hover {
+  background: #c7d2fe;
+}
+
+/* Dynamic Rainbow Colors */
+.tag-link:nth-child(6n+1) { --tag-bg: #f0f9ff; --tag-text: #0369a1; }
+.tag-link:nth-child(6n+2) { --tag-bg: #f0fdf4; --tag-text: #15803d; }
+.tag-link:nth-child(6n+3) { --tag-bg: #fef2f2; --tag-text: #b91c1c; }
+.tag-link:nth-child(6n+4) { --tag-bg: #fff7ed; --tag-text: #c2410c; }
+.tag-link:nth-child(6n+5) { --tag-bg: #f5f3ff; --tag-text: #5b21b6; }
+.tag-link:nth-child(6n+6) { --tag-bg: #fdf2f8; --tag-text: #9d174d; }
+
+/* Show More Button */
+.show-more-tags {
+  background: none;
+  border: none;
+  color: #4f46e5;
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 0.4rem 0.6rem;
+  display: inline-flex;
+  align-items: center;
+}
+
+.show-more-tags:hover {
+  text-decoration: underline;
+}
+
+.hidden-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 0.6rem;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .tags-grid {
+    gap: 0.5rem;
+  }
+  
+  .tag-link {
+    font-size: 0.8rem;
+  }
+}
+</style>
+
+<script>
+// Show/hide additional tags
+document.addEventListener('DOMContentLoaded', function() {
+  const showMoreButtons = document.querySelectorAll('.show-more-tags');
+  
+  showMoreButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      const hiddenTags = document.getElementById('hidden-tags');
+      const isExpanded = this.getAttribute('aria-expanded') === 'true';
+      
+      hiddenTags.hidden = isExpanded;
+      this.setAttribute('aria-expanded', !isExpanded);
+      this.textContent = isExpanded 
+        ? `+${this.dataset.moreCount} more` 
+        : 'Show less';
+    });
+    
+    // Set initial count
+    const remainingTags = button.nextElementSibling.querySelectorAll('.tag-link').length;
+    button.dataset.moreCount = remainingTags;
+  });
+});
+</script>

@@ -1,0 +1,252 @@
+// ========================
+//  Color Palette
+// ========================
+
+// Primary Colors
+$color-primary: #4f46e5 !default;
+$color-primary-light: #a78bfa !default;
+$color-primary-dark: #3730a3 !default;
+
+// Secondary Colors
+$color-secondary: #10b981 !default;
+$color-secondary-light: #6ee7b7 !default;
+$color-secondary-dark: #047857 !default;
+
+// Accent Colors
+$color-accent: #f59e0b !default;
+$color-accent-light: #fcd34d !default;
+$color-accent-dark: #d97706 !default;
+
+// Neutral Colors
+$color-white: #ffffff !default;
+$color-gray-50: #f9fafb !default;
+$color-gray-100: #f3f4f6 !default;
+$color-gray-200: #e5e7eb !default;
+$color-gray-300: #d1d5db !default;
+$color-gray-400: #9ca3af !default;
+$color-gray-500: #6b7280 !default;
+$color-gray-600: #4b5563 !default;
+$color-gray-700: #374151 !default;
+$color-gray-800: #1f2937 !default;
+$color-gray-900: #111827 !default;
+$color-black: #000000 !default;
+
+// Semantic Colors
+$color-success: #10b981 !default;
+$color-warning: #f59e0b !default;
+$color-danger: #ef4444 !default;
+$color-info: #3b82f6 !default;
+
+// Theme Mapping
+$colors: (
+  'primary': $color-primary,
+  'primary-light': $color-primary-light,
+  'primary-dark': $color-primary-dark,
+  'secondary': $color-secondary,
+  'secondary-light': $color-secondary-light,
+  'secondary-dark': $color-secondary-dark,
+  'accent': $color-accent,
+  'accent-light': $color-accent-light,
+  'accent-dark': $color-accent-dark,
+  'white': $color-white,
+  'black': $color-black,
+  'success': $color-success,
+  'warning': $color-warning,
+  'danger': $color-danger,
+  'info': $color-info,
+  'gray': (
+    '50': $color-gray-50,
+    '100': $color-gray-100,
+    '200': $color-gray-200,
+    '300': $color-gray-300,
+    '400': $color-gray-400,
+    '500': $color-gray-500,
+    '600': $color-gray-600,
+    '700': $color-gray-700,
+    '800': $color-gray-800,
+    '900': $color-gray-900
+  )
+) !default;
+
+// ========================
+//  Typography
+// ========================
+
+// Font Families
+$font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 
+             Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif !default;
+$font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace !default;
+$font-serif: Georgia, 'Times New Roman', Times, serif !default;
+
+// Font Weights
+$font-weights: (
+  'thin': 100,
+  'extralight': 200,
+  'light': 300,
+  'normal': 400,
+  'medium': 500,
+  'semibold': 600,
+  'bold': 700,
+  'extrabold': 800,
+  'black': 900
+) !default;
+
+// Font Sizes (Desktop)
+$font-sizes: (
+  'xs': 0.75rem,    // 12px
+  'sm': 0.875rem,    // 14px
+  'base': 1rem,      // 16px
+  'lg': 1.125rem,    // 18px
+  'xl': 1.25rem,     // 20px
+  '2xl': 1.5rem,     // 24px
+  '3xl': 1.875rem,   // 30px
+  '4xl': 2.25rem,    // 36px
+  '5xl': 3rem,       // 48px
+  '6xl': 3.75rem,    // 60px
+  '7xl': 4.5rem      // 72px
+) !default;
+
+// Line Heights
+$line-heights: (
+  'none': 1,
+  'tight': 1.25,
+  'snug': 1.375,
+  'normal': 1.5,
+  'relaxed': 1.625,
+  'loose': 2
+) !default;
+
+// ========================
+//  Spacing System
+// ========================
+
+$spacing-unit: 1rem !default; // 16px base
+
+$spacing: (
+  '0': 0,
+  'px': 1px,
+  '0.5': $spacing-unit * 0.125,  // 2px
+  '1': $spacing-unit * 0.25,     // 4px
+  '1.5': $spacing-unit * 0.375,  // 6px
+  '2': $spacing-unit * 0.5,      // 8px
+  '2.5': $spacing-unit * 0.625,  // 10px
+  '3': $spacing-unit * 0.75,     // 12px
+  '3.5': $spacing-unit * 0.875,  // 14px
+  '4': $spacing-unit,            // 16px
+  '5': $spacing-unit * 1.25,     // 20px
+  '6': $spacing-unit * 1.5,      // 24px
+  '7': $spacing-unit * 1.75,     // 28px
+  '8': $spacing-unit * 2,        // 32px
+  '9': $spacing-unit * 2.25,     // 36px
+  '10': $spacing-unit * 2.5,     // 40px
+  '11': $spacing-unit * 2.75,    // 44px
+  '12': $spacing-unit * 3,       // 48px
+  '14': $spacing-unit * 3.5,     // 56px
+  '16': $spacing-unit * 4,       // 64px
+  '20': $spacing-unit * 5,       // 80px
+  '24': $spacing-unit * 6,       // 96px
+  '28': $spacing-unit * 7,       // 112px
+  '32': $spacing-unit * 8,       // 128px
+  '36': $spacing-unit * 9,       // 144px
+  '40': $spacing-unit * 10,      // 160px
+  '44': $spacing-unit * 11,      // 176px
+  '48': $spacing-unit * 12       // 192px
+) !default;
+
+// ========================
+//  Breakpoints
+// ========================
+
+$breakpoints: (
+  'xs': 375px,
+  'sm': 640px,
+  'md': 768px,
+  'lg': 1024px,
+  'xl': 1280px,
+  '2xl': 1536px
+) !default;
+
+// ========================
+//  Borders & Shadows
+// ========================
+
+// Border Radius
+$border-radius: (
+  'none': 0,
+  'sm': 0.125rem,  // 2px
+  'base': 0.25rem,  // 4px
+  'md': 0.375rem,   // 6px
+  'lg': 0.5rem,     // 8px
+  'xl': 0.75rem,    // 12px
+  '2xl': 1rem,      // 16px
+  '3xl': 1.5rem,    // 24px
+  'full': 9999px
+) !default;
+
+// Box Shadows
+$box-shadows: (
+  'sm': 0 1px 2px 0 rgba(0, 0, 0, 0.05),
+  'base': 0 1px 3px 0 rgba(0, 0, 0, 0.1),
+  'md': 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+  'lg': 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+  'xl': 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+  '2xl': 0 25px 50px -12px rgba(0, 0, 0, 0.25),
+  'inner': inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)
+) !default;
+
+// ========================
+//  Transitions & Animations
+// ========================
+
+// Transition Durations
+$transition-durations: (
+  '75': 75ms,
+  '100': 100ms,
+  '150': 150ms,
+  '200': 200ms,
+  '300': 300ms,
+  '500': 500ms,
+  '700': 700ms,
+  '1000': 1000ms
+) !default;
+
+// Transition Timing Functions
+$transition-timing: (
+  'linear': linear,
+  'in': cubic-bezier(0.4, 0, 1, 1),
+  'out': cubic-bezier(0, 0, 0.2, 1),
+  'in-out': cubic-bezier(0.4, 0, 0.2, 1)
+) !default;
+
+// ========================
+//  Z-Index Layers
+// ========================
+
+$z-indices: (
+  'auto': auto,
+  '0': 0,
+  '10': 10,
+  '20': 20,
+  '30': 30,
+  '40': 40,
+  '50': 50
+) !default;
+
+// ========================
+//  Theme Config
+// ========================
+
+$theme-config: (
+  'font-family': $font-sans,
+  'font-size-base': map-get($font-sizes, 'base'),
+  'line-height-base': map-get($line-heights, 'normal'),
+  'color-body': $color-white,
+  'color-text': $color-gray-900,
+  'color-heading': $color-gray-900,
+  'color-link': $color-primary,
+  'color-link-hover': $color-primary-light,
+  'border-radius': map-get($border-radius, 'base'),
+  'box-shadow': map-get($box-shadows, 'base'),
+  'transition-duration': map-get($transition-durations, '300'),
+  'transition-timing': map-get($transition-timing, 'in-out')
+) !default;

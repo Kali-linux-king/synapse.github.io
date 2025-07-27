@@ -2,50 +2,316 @@
 layout: default
 ---
 
-{% comment %}
-  This layout is for standard static pages (e.g., About, Contact, 404).
-  It inherits from default.html to provide consistent header, footer, and global scripts.
-  It includes Schema.org markup for better SEO and provides a structured content area.
-{% endcomment %}
-
-<main class="page-main-content" itemscope itemtype="https://schema.org/WebPage">
-  <div class="container py-5">
-    <header class="page-header text-center mb-5">
-      {% if page.title %}
-        <h1 class="page-title gradient-text" itemprop="headline">{{ page.title | escape }}</h1>
-      {% endif %}
-      {% if page.subtitle %}
-        <p class="page-subtitle" itemprop="description">{{ page.subtitle | escape }}</p>
-      {% endif %}
-    </header>
-
-    <article class="page-content flow" itemprop="mainContentOfPage">
-      {{ content }}
-    </article>
-
-    {% comment %}
-      You might want to include a call to action or related links on static pages too.
-      This assumes you might have an _includes/page-cta.html file.
-    {% endcomment %}
-    {% if page.show_cta %}
-      {% include page-cta.html %}
-    {% endif %}
-
+{% if page.cover_image %}
+  <div class="page-cover">
+    <img src="{{ page.cover_image | relative_url }}" 
+         alt="{{ page.title }}" 
+         class="cover-image"
+         loading="lazy">
+    <div class="cover-overlay"></div>
+    <h1 class="cover-title">{{ page.title }}</h1>
   </div>
-</main>
+{% endif %}
 
-{% comment %}
-  Optional: Add a script for subtle animations or interactions specific to static pages.
-  This assumes you have assets/js/page-animations.js and it's linked in default.html or scripts.html.
-{% endcomment %}
+<article class="page-content">
+  <div class="wrapper">
+    {% unless page.cover_image %}
+      <header class="page-header">
+        <h1 class="page-title">{{ page.title }}</h1>
+        {% if page.subtitle %}
+          <p class="page-subtitle">{{ page.subtitle }}</p>
+        {% endif %}
+      </header>
+    {% endunless %}
+
+    <div class="content-container">
+      <div class="content-body">
+        {{ content }}
+      </div>
+
+      {% if page.toc %}
+        <aside class="content-sidebar">
+          <div class="toc-container" id="table-of-contents">
+            <h3 class="toc-title">Contents</h3>
+            {% include toc.html html=content class="toc-list" %}
+          </div>
+        </aside>
+      {% endif %}
+    </div>
+
+    {% if page.cta %}
+      <div class="page-cta-wrapper">
+        {% include page-cta.html 
+           title=page.cta.title 
+           subtitle=page.cta.subtitle
+           cta_text=page.cta.button_text 
+           cta_url=page.cta.button_url
+           type="default" 
+        %}
+      </div>
+    {% endif %}
+  </div>
+</article>
+
+{% if page.related_posts %}
+  <section class="related-posts">
+    <div class="wrapper">
+      <h2 class="section-title">Related Content</h2>
+      <div class="post-grid">
+        {% for post in site.related_posts limit:3 %}
+          {% include card.html 
+             title=post.title 
+             description=post.excerpt 
+             url=post.url
+             image=post.image
+          %}
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+{% endif %}
+
+<style>
+/* ========================
+   PAGE LAYOUT STYLES
+   ======================== */
+.page-cover {
+  position: relative;
+  height: 60vh;
+  max-height: 600px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cover-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cover-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.4);
+  background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.7));
+}
+
+.cover-title {
+  position: absolute;
+  color: white;
+  font-size: 3rem;
+  text-align: center;
+  max-width: 800px;
+  padding: 0 2rem;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  z-index: 2;
+}
+
+.page-header {
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.page-title {
+  font-size: 2.5rem;
+  margin: 0 0 1rem 0;
+  line-height: 1.2;
+}
+
+.page-subtitle {
+  font-size: 1.2rem;
+  color: var(--text-light);
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.content-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+}
+
+@media (min-width: 992px) {
+  .content-container {
+    grid-template-columns: minmax(0, 1fr) 300px;
+  }
+}
+
+.content-body {
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Table of Contents */
+.toc-container {
+  position: sticky;
+  top: 2rem;
+  padding: 1.5rem;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+.toc-title {
+  margin: 0 0 1rem 0;
+  font-size: 1.1rem;
+}
+
+.toc-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.toc-list li {
+  margin: 0.5rem 0;
+}
+
+.toc-list a {
+  color: var(--text-light);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.toc-list a:hover {
+  color: var(--primary);
+}
+
+/* Content Styling */
+.content-body :is(h2, h3, h4) {
+  scroll-margin-top: 2rem;
+}
+
+.content-body > * + * {
+  margin-top: 1.5rem;
+}
+
+.content-body h2 {
+  font-size: 1.8rem;
+  margin-top: 3rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+
+.content-body h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: var(--primary);
+}
+
+.content-body h3 {
+  font-size: 1.4rem;
+  margin-top: 2.5rem;
+}
+
+.content-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+}
+
+.content-body blockquote {
+  border-left: 4px solid var(--primary);
+  padding-left: 1.5rem;
+  margin: 1.5rem 0;
+  color: var(--text-light);
+  font-style: italic;
+}
+
+/* Related Posts */
+.related-posts {
+  padding: 4rem 0;
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border);
+}
+
+.post-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .page-cover {
+    height: 50vh;
+  }
+  
+  .cover-title {
+    font-size: 2.2rem;
+  }
+  
+  .page-title {
+    font-size: 2rem;
+  }
+  
+  .page-header {
+    margin-bottom: 2rem;
+  }
+  
+  .content-body h2 {
+    font-size: 1.6rem;
+  }
+  
+  .toc-container {
+    position: static;
+    margin-top: 3rem;
+  }
+}
+</style>
+
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    // Example: Add a class to fade in content on load
-    const pageContent = document.querySelector('.page-content');
-    if (pageContent) {
-      pageContent.classList.add('fade-in-on-load');
-    }
-
-    // You can add more page-specific JS here or link an external file
+// Smooth scroll for anchor links
+document.addEventListener('DOMContentLoaded', function() {
+  // Highlight current TOC item
+  const tocLinks = document.querySelectorAll('.toc-list a');
+  const headings = document.querySelectorAll('.content-body h2, .content-body h3');
+  
+  function updateTocHighlight() {
+    let currentId = '';
+    headings.forEach(heading => {
+      const rect = heading.getBoundingClientRect();
+      if (rect.top <= 100) {
+        currentId = heading.id;
+      }
+    });
+    
+    tocLinks.forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('href') === `#${currentId}`) {
+        link.classList.add('active');
+      }
+    });
+  }
+  
+  if (tocLinks.length > 0) {
+    window.addEventListener('scroll', updateTocHighlight);
+    updateTocHighlight();
+  }
+  
+  // Add anchor links to headings
+  headings.forEach(heading => {
+    if (!heading.id) return;
+    
+    const anchor = document.createElement('a');
+    anchor.href = `#${heading.id}`;
+    anchor.className = 'heading-anchor';
+    anchor.innerHTML = '<i class="fas fa-link"></i>';
+    anchor.setAttribute('aria-label', 'Permalink to this section');
+    heading.appendChild(anchor);
   });
+});
 </script>

@@ -1,81 +1,98 @@
-# Core Settings
-title: "SYNAPSE"
-tagline: "Interconnecting Knowledge for Deeper Understanding"
-baseurl: ""
-url: "https://kali-linux-king.github.io"
-timezone: "Asia/Karachi"
-encoding: "UTF-8"
-future: true
-published: true
-locale: "en_US"
+# ========================
+#  SITE CORE CONFIGURATION
+# ========================
+title: "Synapse Knowledge Hub"
+description: "Curated insights with affiliate recommendations for AI, tech, and cognitive science"
+baseurl: "" # For project repos, use '/repository-name'
+url: "https://yourusername.github.io" # Replace with your GitHub Pages URL
 
-# Plugins (no theme needed)
-plugins:
-  - jekyll-feed
-  - jekyll-sitemap
-  - jekyll-seo-tag
-  - jekyll-sass-converter
+# =================
+#  MONETIZATION SETTINGS
+# =================
+affiliates:
+  amazon:
+    tracking_id: "YOUR_AMAZON_ASSOCIATE_ID" # From Amazon Associates
+    auto_disclaimer: true
+  bookshop:
+    affiliate_id: "YOUR_BOOKSHOP_ID"
+  ko-fi:
+    username: "yourkofiusername"
+    button_color: "#29abe0"
 
-# Motion Effects Configuration
-synapse:
-  effects:
-    particles: true
-    tilt_cards: true
-    floating_animations: true
-  
-  particles:
-    density: 80
-    color: "#7c3aed"
-    line_color: "#10b981"
-
-# Content Structure
+# =================
+#  CONTENT STRUCTURE
+# =================
 collections:
-  articles:
+  curated_resources:
     output: true
-    permalink: "/articles/:title/"
-  
-  tutorials:
+    permalink: /resources/:path/
+  premium_guides:
     output: true
-    permalink: "/tutorials/:slug/"
-  
-  projects:
-    output: true
-    permalink: "/projects/:year/:slug/"
+    permalink: /premium/:title/
 
 defaults:
   - scope:
       path: ""
+      type: "posts"
     values:
-      layout: "default"
-  
-  - scope:
-      path: "articles"
-      type: "articles"
-    values:
-      layout: "article"
-      toc: true
+      layout: "post"
+      comments: true
+      monetization: true # Enables affiliate sections
 
-# Build Settings
+# =================
+#  TECHNICAL SETTINGS
+# =================
 markdown: kramdown
 highlighter: rouge
-kramdown:
-  input: GFM
-  syntax_highlighter: rouge
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-sitemap
+  - jekyll-paginate-v2
 
-exclude:
-  - Gemfile
-  - Gemfile.lock
-  - node_modules/
-  - vendor/
+paginate: 5
+paginate_path: "/blog/page:num/"
 
-# Remove these lines if they exist
-defaults:
-  - scope:
-      path: "articles"
-    values:
-      toc: true  # Remove this temporarily
-      
-# _config.yml
-ai_services:
-  knowledge_graph: "https://api.synapse.ai/graph/v3"
-  content_optimizer: "https://api.synapse.ai/optimize/v2"
+# =================
+#  PERFORMANCE OPTIMIZATION
+# =================
+compress_html:
+  clippings: all
+  comments: all
+  endings: all
+  blanklines: false
+
+# =================
+#  SEO CONFIGURATION
+# =================
+seo:
+  title_separator: "|"
+  social:
+    name: "Synapse Knowledge Hub"
+    links:
+      - "https://twitter.com/yourhandle"
+      - "https://github.com/yourusername"
+
+# =================
+#  CUSTOM VARIABLES
+# =================
+theme_settings:
+  primary_color: "#4f46e5"
+  dark_mode: true
+  typography:
+    header_font: "Helvetica, sans-serif"
+    body_font: "Georgia, serif"
+
+author:
+  name: "Your Name"
+  bio: "Curator of interconnected ideas"
+  email: "your@email.com"
+  social_links:
+    github: yourusername
+    twitter: yourhandle
+
+# =================
+#  SAFE MODE FOR GITHUB
+# =================
+safe: true
+whitelist: [jekyll-paginate, jekyll-seo-tag]

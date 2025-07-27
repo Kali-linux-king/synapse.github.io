@@ -1,0 +1,263 @@
+<!-- 
+  Post Navigation Component
+  Usage: {% include post-navigation.html 
+            show_categories=true 
+            show_tags=true
+            related_posts=true
+          %}
+-->
+<nav class="post-navigation">
+  <div class="navigation-grid">
+    <!-- Previous/Next Posts -->
+    <div class="nav-section">
+      <h3 class="section-title">Continue Reading</h3>
+      <div class="post-pagination">
+        {% if page.previous.url %}
+          <a href="{{ page.previous.url | relative_url }}" class="nav-link prev-post">
+            <span class="direction">Previous</span>
+            <span class="post-title">{{ page.previous.title }}</span>
+            <i class="fas fa-arrow-left"></i>
+          </a>
+        {% endif %}
+        
+        {% if page.next.url %}
+          <a href="{{ page.next.url | relative_url }}" class="nav-link next-post">
+            <span class="direction">Next</span>
+            <span class="post-title">{{ page.next.title }}</span>
+            <i class="fas fa-arrow-right"></i>
+          </a>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Categories -->
+    {% if include.show_categories and page.categories.size > 0 %}
+    <div class="nav-section">
+      <h3 class="section-title">Categories</h3>
+      <div class="category-list">
+        {% for category in page.categories %}
+          <a href="{{ '/categories/' | relative_url }}#{{ category | slugify }}" 
+             class="category-pill">
+            {{ category }}
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Tags -->
+    {% if include.show_tags and page.tags.size > 0 %}
+    <div class="nav-section">
+      <h3 class="section-title">Tags</h3>
+      <div class="tag-list">
+        {% for tag in page.tags %}
+          <a href="{{ '/tags/' | relative_url }}#{{ tag | slugify }}" 
+             class="tag-pill">
+            {{ tag }}
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- Related Posts -->
+  {% if include.related_posts %}
+    {% assign related_posts = site.related_posts | limit: 3 %}
+    {% if related_posts.size > 0 %}
+    <div class="related-posts">
+      <h3 class="section-title">Related Content</h3>
+      <div class="related-grid">
+        {% for post in related_posts %}
+          <article class="related-card">
+            <a href="{{ post.url | relative_url }}">
+              <h4>{{ post.title }}</h4>
+              <p class="excerpt">{{ post.excerpt | strip_html | truncate: 100 }}</p>
+              <time datetime="{{ post.date | date_to_xmlschema }}">
+                {{ post.date | date: "%B %-d, %Y" }}
+              </time>
+            </a>
+          </article>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+  {% endif %}
+</nav>
+
+<style>
+/* ========================
+   POST NAVIGATION STYLES
+   ======================== */
+.post-navigation {
+  margin: 3rem 0;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 2rem;
+}
+
+.navigation-grid {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.nav-section {
+  margin-bottom: 1.5rem;
+}
+
+.section-title {
+  font-size: 1.1rem;
+  color: #4b5563;
+  margin-bottom: 1rem;
+  position: relative;
+  padding-left: 1rem;
+}
+
+.section-title::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 60%;
+  width: 3px;
+  background: #4f46e5;
+  border-radius: 3px;
+}
+
+/* Pagination Links */
+.post-pagination {
+  display: grid;
+  gap: 1rem;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 8px;
+  background: #f9fafb;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+  background: #f3f4f6;
+  transform: translateX(5px);
+}
+
+.prev-post {
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.next-post {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.direction {
+  display: block;
+  font-size: 0.8rem;
+  color: #6b7280;
+  margin-bottom: 0.3rem;
+}
+
+.post-title {
+  font-weight: 500;
+  color: #111827;
+}
+
+.nav-link i {
+  margin: 0 0.5rem;
+  color: #4f46e5;
+}
+
+/* Categories & Tags */
+.category-list,
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.category-pill,
+.tag-pill {
+  display: inline-block;
+  padding: 0.4rem 0.8rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.category-pill {
+  background: #e0e7ff;
+  color: #3730a3;
+}
+
+.category-pill:hover {
+  background: #c7d2fe;
+}
+
+.tag-pill {
+  background: #ede9fe;
+  color: #5b21b6;
+}
+
+.tag-pill:hover {
+  background: #ddd6fe;
+}
+
+/* Related Posts */
+.related-posts {
+  margin-top: 3rem;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 2rem;
+}
+
+.related-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.related-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.related-card:hover {
+  border-color: #4f46e5;
+  transform: translateY(-3px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.related-card h4 {
+  margin: 0 0 0.5rem 0;
+  color: #111827;
+}
+
+.related-card .excerpt {
+  color: #4b5563;
+  font-size: 0.9rem;
+  margin: 0 0 0.5rem 0;
+}
+
+.related-card time {
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+@media (max-width: 768px) {
+  .post-pagination {
+    grid-template-columns: 1fr;
+  }
+  
+  .nav-link {
+    padding: 0.8rem;
+  }
+}
+</style>

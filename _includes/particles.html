@@ -1,0 +1,185 @@
+<!-- 
+  Advanced Particles System
+  Usage: {% include particles.html 
+            id="particles-js" 
+            preset="neural" 
+            color="#4f46e5"
+            density=0.7
+            interactivity=true
+            position="fixed" 
+          %}
+-->
+<div id="{{ include.id | default: 'particles-js' }}" 
+     class="particles-js-container 
+            particles-{{ include.preset | default: 'default' }}
+            particles-position-{{ include.position | default: 'absolute' }}"
+     data-particles-config='{
+       "preset": "{{ include.preset | default: 'default' }}",
+       "color": "{{ include.color | default: '#4f46e5' }}",
+       "density": {{ include.density | default: 0.5 }},
+       "interactive": {{ include.interactivity | default: true }}
+     }'></div>
+
+<script>
+// Self-contained particles system with fallback
+(function() {
+  // Configuration presets
+  const presets = {
+    default: {
+      particles: {
+        number: { value: 60, density: { enable: true, value_area: 800 }},
+        color: { value: "#4f46e5" },
+        shape: { type: "circle" },
+        opacity: { value: 0.5, random: true, anim: { enable: true, speed: 1 }},
+        size: { value: 3, random: true, anim: { enable: true, speed: 2 }},
+        line_linked: { enable: true, distance: 150, color: "#4f46e5", opacity: 0.2, width: 1 },
+        move: { enable: true, speed: 1, direction: "none", out_mode: "out" }
+      },
+      interactivity: {
+        detect_on: "canvas",
+        events: {
+          onhover: { enable: true, mode: "grab" },
+          onclick: { enable: true, mode: "push" },
+          resize: true
+        }
+      }
+    },
+    neural: {
+      particles: {
+        number: { value: 80, density: { enable: true, value_area: 700 }},
+        color: { value: "#9333ea" },
+        line_linked: { distance: 120, color: "#a855f7", opacity: 0.3, width: 1.5 },
+        move: { speed: 0.8, out_mode: "bounce" }
+      },
+      interactivity: {
+        events: { onhover: { enable: true, mode: "repulse" }}
+      }
+    },
+    quantum: {
+      particles: {
+        number: { value: 100, density: { enable: true, value_area: 600 }},
+        color: { value: "#3b82f6" },
+        shape: { type: "triangle" },
+        line_linked: { enable: false },
+        move: { speed: 3, direction: "top" }
+      }
+    }
+  };
+
+  // Initialize particles when DOM is ready
+  document.addEventListener('DOMContentLoaded', function() {
+    const containers = document.querySelectorAll('.particles-js-container');
+    
+    containers.forEach(container => {
+      const config = getConfig(container);
+      initParticles(container.id, config);
+    });
+  });
+
+  // Generate config from HTML attributes
+  function getConfig(container) {
+    const presetName = container.dataset.particlesConfig 
+      ? JSON.parse(container.dataset.particlesConfig).preset 
+      : 'default';
+    const customConfig = container.dataset.particlesConfig 
+      ? JSON.parse(container.dataset.particlesConfig) 
+      : {};
+    
+    const preset = presets[presetName] || presets.default;
+    return mergeConfig(preset, customConfig);
+  }
+
+  // Deep merge configurations
+  function mergeConfig(base, custom) {
+    const result = JSON.parse(JSON.stringify(base));
+    
+    // Apply custom color
+    if (custom.color) {
+      result.particles.color.value = custom.color;
+      if (result.particles.line_linked) {
+        result.particles.line_linked.color = custom.color;
+      }
+    }
+    
+    // Adjust density
+    if (custom.density) {
+      result.particles.number.value = Math.floor(60 * custom.density);
+    }
+    
+    // Toggle interactivity
+    if (custom.interactive === false) {
+      result.interactivity.events.onhover.enable = false;
+      result.interactivity.events.onclick.enable = false;
+    }
+    
+    return result;
+  }
+
+  // Initialize particles.js
+  function initParticles(elementId, config) {
+    if (typeof particlesJS === 'function') {
+      particlesJS(elementId, config);
+    } else {
+      loadParticlesJS().then(() => particlesJS(elementId, config));
+    }
+  }
+
+  // Dynamically load particles.js
+  function loadParticlesJS() {
+    return new Promise((resolve) => {
+      const script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js';
+      script.onload = resolve;
+      document.head.appendChild(script);
+    });
+  }
+})();
+</script>
+
+<style>
+/* Base Particles Container */
+.particles-js-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Position Variations */
+.particles-position-fixed {
+  position: fixed;
+}
+
+.particles-position-relative {
+  position: relative;
+}
+
+/* Preset-specific styles */
+.particles-neural {
+  opacity: 0.7;
+}
+
+.particles-quantum {
+  opacity: 0.4;
+}
+
+/* Performance Optimizations */
+.particles-js-container > canvas {
+  will-change: transform;
+  image-rendering: optimizeSpeed;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+  .particles-js-container {
+    opacity: 0.5;
+  }
+  
+  .particles-neural .particles-js-container > canvas {
+    display: none;
+  }
+}
+</style>

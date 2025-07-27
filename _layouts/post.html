@@ -2,20 +2,41 @@
 layout: default
 ---
 
-<article class="post" itemscope itemtype="https://schema.org/BlogPosting">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
   <header class="post-header">
-    <h1 class="post-title" itemprop="headline">{{ page.title }}</h1>
+    {% if page.image %}
+      <div class="post-image">
+        <img src="{{ page.image | relative_url }}" 
+             alt="{{ page.title }}" 
+             class="featured-image"
+             loading="lazy">
+      </div>
+    {% endif %}
     
     <div class="post-meta">
-      <time datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
-        {{ page.date | date: "%B %-d, %Y" }}
-      </time>
-      {% if page.author %}
-        <span itemprop="author" itemscope itemtype="https://schema.org/Person">
-          <span itemprop="name">{{ page.author }}</span>
+      <div class="meta-left">
+        <time datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
+          {{ page.date | date: "%B %-d, %Y" }}
+        </time>
+        <span class="reading-time">
+          <i class="fas fa-clock"></i>
+          {% assign words = content | number_of_words %}
+          {% if words < 360 %}1 min read{% else %}{{ words | divided_by:180 }} min read{% endif %}
         </span>
+      </div>
+      
+      {% if page.tags.size > 0 %}
+        <div class="meta-right">
+          {% include post-tags.html style="pill" show_count=false %}
+        </div>
       {% endif %}
     </div>
+    
+    <h1 class="post-title" itemprop="name headline">{{ page.title }}</h1>
+    
+    {% if page.subtitle %}
+      <p class="post-subtitle">{{ page.subtitle }}</p>
+    {% endif %}
   </header>
 
   <div class="post-content" itemprop="articleBody">
@@ -23,7 +44,240 @@ layout: default
   </div>
 
   <footer class="post-footer">
-    {% include post-tags.html %}
-    {% include post-navigation.html %}
+    {% include post-navigation.html 
+       show_categories=true 
+       show_tags=false
+       related_posts=true 
+    %}
+    
+    {% if site.disqus.shortname %}
+      {% include disqus_comments.html %}
+    {% endif %}
   </footer>
 </article>
+
+{% if page.monetization.enabled %}
+  {% include page-cta.html 
+     title="Enjoyed this article?" 
+     subtitle="Support our work by checking out our premium content" 
+     cta_text="View Premium" 
+     cta_url="/premium"
+     premium=true
+  %}
+{% endif %}
+
+<style>
+/* ========================
+   POST LAYOUT STYLES
+   ======================== */
+.post {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 1.5rem 4rem;
+}
+
+.post-header {
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.post-image {
+  margin: 0 -2rem 2rem;
+  border-radius: 0;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+@media (min-width: 768px) {
+  .post-image {
+    border-radius: 8px;
+    margin: 0 auto 3rem;
+    max-width: 120%;
+    width: calc(100% + 4rem);
+  }
+}
+
+.featured-image {
+  width: 100%;
+  height: auto;
+  max-height: 60vh;
+  object-fit: cover;
+}
+
+.post-meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  color: var(--text-light);
+}
+
+.meta-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.reading-time {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.post-title {
+  font-size: 2.2rem;
+  line-height: 1.2;
+  margin: 0 0 1rem 0;
+}
+
+.post-subtitle {
+  font-size: 1.2rem;
+  color: var(--text-light);
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.post-content {
+  line-height: 1.8;
+}
+
+.post-content > * + * {
+  margin-top: 1.5rem;
+}
+
+.post-content :is(h2, h3) {
+  scroll-margin-top: 2rem;
+}
+
+.post-content h2 {
+  font-size: 1.6rem;
+  margin-top: 3rem;
+  margin-bottom: 1.2rem;
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+
+.post-content h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: var(--primary);
+}
+
+.post-content h3 {
+  font-size: 1.3rem;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.post-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 1.5rem auto;
+  display: block;
+}
+
+.post-content blockquote {
+  border-left: 4px solid var(--primary);
+  padding-left: 1.5rem;
+  margin: 1.5rem 0;
+  color: var(--text-light);
+  font-style: italic;
+}
+
+.post-content pre {
+  background: var(--bg-secondary);
+  padding: 1.5rem;
+  border-radius: 8px;
+  overflow-x: auto;
+}
+
+.post-content code {
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 0.9em;
+}
+
+.post-content .highlight {
+  margin: 1.5rem 0;
+}
+
+.post-footer {
+  margin-top: 4rem;
+  border-top: 1px solid var(--border);
+  padding-top: 2rem;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .post {
+    padding: 0 1rem 3rem;
+  }
+  
+  .post-title {
+    font-size: 1.8rem;
+  }
+  
+  .post-subtitle {
+    font-size: 1.1rem;
+  }
+  
+  .post-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .post-content h2 {
+    font-size: 1.4rem;
+  }
+  
+  .post-content h3 {
+    font-size: 1.2rem;
+  }
+}
+</style>
+
+<script>
+// Enhance post content interactivity
+document.addEventListener('DOMContentLoaded', function() {
+  // Add anchor links to headings
+  const headings = document.querySelectorAll('.post-content h2, .post-content h3');
+  
+  headings.forEach(heading => {
+    if (!heading.id) return;
+    
+    const anchor = document.createElement('a');
+    anchor.href = `#${heading.id}`;
+    anchor.className = 'heading-anchor';
+    anchor.innerHTML = '<i class="fas fa-link"></i>';
+    anchor.setAttribute('aria-label', 'Permalink to this section');
+    heading.appendChild(anchor);
+  });
+  
+  // Copy code blocks functionality
+  document.querySelectorAll('pre').forEach(pre => {
+    const button = document.createElement('button');
+    button.className = 'copy-code';
+    button.innerHTML = '<i class="far fa-copy"></i>';
+    button.setAttribute('aria-label', 'Copy code to clipboard');
+    
+    button.addEventListener('click', function() {
+      const code = pre.querySelector('code').innerText;
+      navigator.clipboard.writeText(code).then(() => {
+        button.innerHTML = '<i class="fas fa-check"></i>';
+        setTimeout(() => {
+          button.innerHTML = '<i class="far fa-copy"></i>';
+        }, 2000);
+      });
+    });
+    
+    pre.appendChild(button);
+  });
+});
+</script>
