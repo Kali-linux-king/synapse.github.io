@@ -1,0 +1,51 @@
+---
+layout: default
+---
+
+{% comment %}
+  This layout is for standard static pages (e.g., About, Contact, 404).
+  It inherits from default.html to provide consistent header, footer, and global scripts.
+  It includes Schema.org markup for better SEO and provides a structured content area.
+{% endcomment %}
+
+<main class="page-main-content" itemscope itemtype="https://schema.org/WebPage">
+  <div class="container py-5">
+    <header class="page-header text-center mb-5">
+      {% if page.title %}
+        <h1 class="page-title gradient-text" itemprop="headline">{{ page.title | escape }}</h1>
+      {% endif %}
+      {% if page.subtitle %}
+        <p class="page-subtitle" itemprop="description">{{ page.subtitle | escape }}</p>
+      {% endif %}
+    </header>
+
+    <article class="page-content flow" itemprop="mainContentOfPage">
+      {{ content }}
+    </article>
+
+    {% comment %}
+      You might want to include a call to action or related links on static pages too.
+      This assumes you might have an _includes/page-cta.html file.
+    {% endcomment %}
+    {% if page.show_cta %}
+      {% include page-cta.html %}
+    {% endif %}
+
+  </div>
+</main>
+
+{% comment %}
+  Optional: Add a script for subtle animations or interactions specific to static pages.
+  This assumes you have assets/js/page-animations.js and it's linked in default.html or scripts.html.
+{% endcomment %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Example: Add a class to fade in content on load
+    const pageContent = document.querySelector('.page-content');
+    if (pageContent) {
+      pageContent.classList.add('fade-in-on-load');
+    }
+
+    // You can add more page-specific JS here or link an external file
+  });
+</script>
